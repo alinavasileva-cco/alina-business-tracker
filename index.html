@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#eee9df">
+  <meta name="description" content="Алина Васильева — Commercial Director / CCO. Стратегия, коммерция, процессы, команды и P&L.">
+  <title>Алина Васильева — Commercial Director / CCO</title>
+  <style>
+    :root{
+      --paper:#f4f0e8;
+      --ivory:#eee9df;
+      --plaster:#e4ddd1;
+      --plaster-2:#d8cfc0;
+      --concrete:#aaa59c;
+      --ink:#151411;
+      --muted:#69655e;
+      --hairline:rgba(21,20,17,.18);
+      --vermilion:#c93b2e;
+      --radius:42px;
+      --page:min(1880px,calc(100vw - 34px));
+      --serif:Georgia,"Times New Roman",serif;
+      --sans:Inter,Arial,Helvetica,sans-serif;
+      --mono:"SFMono-Regular",Consolas,"Liberation Mono",monospace;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;background:var(--paper)}
+    body{margin:0;color:var(--ink);background:var(--paper);font-family:var(--sans);font-size:17px;line-height:1.5;text-rendering:optimizeLegibility}
+    a{color:inherit;text-decoration:none}
+    button{font:inherit;color:inherit}
+    img{max-width:100%;display:block}
+    .site{width:var(--page);margin:17px auto 40px;overflow:hidden;border-radius:var(--radius);background:var(--ivory);box-shadow:0 22px 70px rgba(53,44,34,.08)}
+    .shell{padding-inline:clamp(24px,4.2vw,82px)}
+    .eyebrow,.label,.mono{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase}
+    .eyebrow,.label{color:var(--vermilion)}
+    .serif{font-family:var(--serif);font-weight:400;letter-spacing:-.045em}
+    .site-header{height:86px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--hairline);position:relative;z-index:50}
+    .logo{font-family:var(--serif);font-weight:700;font-size:1.45rem;letter-spacing:-.08em}
+    .nav{display:flex;gap:clamp(20px,2.7vw,52px);align-items:center;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em}
+    .nav a{position:relative;padding-block:12px}
+    .nav a:after{content:"";position:absolute;left:0;right:100%;bottom:7px;height:1px;background:var(--vermilion);transition:right .22s ease}
+    .nav a:hover:after,.nav a:focus-visible:after{right:0}
+    .nav-dot{width:8px;height:8px;border-radius:50%;background:var(--vermilion)}
+    .menu-button{display:none;border:0;background:transparent;padding:8px 0;text-transform:uppercase;font-size:.75rem;letter-spacing:.08em}
+
+    .hero{position:relative;min-height:clamp(720px,83vh,960px);isolation:isolate;overflow:hidden}
+    .hero:before{content:"";position:absolute;inset:0;background:
+      radial-gradient(circle at 77% 51%,rgba(255,255,255,.82) 0 6%,transparent 24%),
+      linear-gradient(110deg,transparent 0 58%,rgba(255,255,255,.38) 58.2% 62%,transparent 62.2%),
+      linear-gradient(90deg,var(--ivory),#eee9df 56%,#e8e0d5);z-index:-3}
+    .hero:after{content:"";position:absolute;right:8.5%;top:11%;width:29%;height:70%;border-radius:180px 180px 0 0;background:linear-gradient(90deg,rgba(255,255,255,.24),rgba(255,255,255,.72));box-shadow:inset 18px 0 34px rgba(77,65,50,.06),-28px 24px 70px rgba(87,71,54,.08);z-index:-2}
+    .hero-grid{min-height:inherit;display:grid;grid-template-columns:minmax(300px,1.08fr) minmax(350px,.9fr) minmax(250px,.72fr);align-items:center;gap:clamp(24px,3vw,58px);padding-block:64px 48px}
+    .hero-copy{align-self:center;z-index:3;padding-top:10px}
+    .hero-title{font-size:clamp(4.5rem,7.7vw,9.4rem);line-height:.82;margin:0 0 34px;max-width:8ch}
+    .hero-title span{display:block}
+    .hero-title .dot{display:inline;color:var(--vermilion);font-size:.38em;margin-left:.08em}
+    .hero-id{display:grid;gap:4px;font-size:1rem}
+    .hero-id strong{font-weight:500;font-size:1.35rem}
+    .hero-portrait-wrap{align-self:end;height:min(76vh,760px);position:relative;z-index:2;background:transparent!important;border:0!important;box-shadow:none!important;overflow:visible!important}
+    .hero-portrait-wrap:before,.hero-portrait-wrap:after{content:none!important}
+    .hero-portrait{position:absolute;left:50%;bottom:-1px;transform:translateX(-50%);height:100%;width:auto;max-width:none;object-fit:contain;object-position:center bottom;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;filter:none!important;mix-blend-mode:normal!important;clip-path:none!important}
+    .hero-aside{align-self:center;display:grid;gap:30px;max-width:310px;z-index:3}
+    .hero-aside p{margin:0;font-size:clamp(1rem,1.15vw,1.24rem);line-height:1.65}
+    .hero-link{display:inline-flex;align-items:center;gap:15px;color:var(--vermilion);text-transform:uppercase;font-size:.78rem;letter-spacing:.05em;width:max-content;border-bottom:1px solid rgba(201,59,46,.4);padding-bottom:8px}
+    .hero-bottom{position:absolute;left:clamp(24px,4.2vw,82px);right:clamp(24px,4.2vw,82px);bottom:26px;display:flex;justify-content:space-between;align-items:end;border-top:1px solid var(--hairline);padding-top:18px;z-index:4}
+    .hero-bottom .thesis{font-family:var(--serif);font-size:clamp(1.4rem,2vw,2.5rem);letter-spacing:-.035em}
+    .hero-bottom .note{max-width:460px;color:var(--muted);font-size:.88rem}
+
+    .section{position:relative;padding-block:clamp(92px,11vw,180px);border-top:1px solid var(--hairline)}
+    .section-head{display:grid;grid-template-columns:minmax(230px,.75fr) minmax(380px,1.25fr);gap:clamp(40px,7vw,140px);align-items:start;margin-bottom:clamp(70px,9vw,140px)}
+    .section-title{font-size:clamp(3rem,6vw,7rem);line-height:.9;margin:0;max-width:10ch}
+    .section-lead{font-size:clamp(1.25rem,1.7vw,2rem);max-width:760px;line-height:1.45;margin:0}
+    .section-copy{max-width:680px;color:var(--muted)}
+
+    .scale-context{background:linear-gradient(135deg,#f1ece3,#e6ded2)}
+    .context-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(45px,8vw,145px);align-items:end}
+    .context-statement{font-family:var(--serif);font-size:clamp(2.6rem,5vw,6.2rem);line-height:.95;letter-spacing:-.045em;margin:0}
+    .context-statement em{color:var(--vermilion);font-style:normal}
+    .context-data{border-left:1px solid var(--hairline);padding-left:clamp(24px,4vw,60px);display:grid;gap:30px}
+    .context-data p{margin:0;font-size:1.06rem;max-width:520px}
+    .context-data strong{font-family:var(--serif);font-size:clamp(2.2rem,3.6vw,4.6rem);font-weight:400;letter-spacing:-.04em;display:block;line-height:1;margin-bottom:8px}
+
+    .cases-intro{background:var(--paper)}
+    .cases-intro-line{width:min(590px,64%);height:1px;background:var(--vermilion);margin-left:auto;position:relative}
+    .cases-intro-line:after{content:"";position:absolute;right:0;top:50%;width:7px;height:7px;border-radius:50%;background:var(--vermilion);transform:translate(50%,-50%)}
+
+    .case{min-height:900px;background:var(--ivory);overflow:hidden}
+    .case:nth-of-type(even){background:#e9e2d7}
+    .case-layout{display:grid;grid-template-columns:minmax(300px,.76fr) minmax(520px,1.34fr);gap:clamp(40px,6vw,110px);align-items:center}
+    .case-copy h2{font-size:clamp(3.1rem,5.2vw,6.5rem);line-height:.9;margin:18px 0 30px;max-width:11ch}
+    .case-copy>p{max-width:540px;margin:0 0 40px;font-size:1.05rem}
+    .case-logic{display:grid;gap:0;border-top:1px solid var(--hairline);max-width:580px}
+    .case-logic div{display:grid;grid-template-columns:130px 1fr;gap:18px;padding:18px 0;border-bottom:1px solid var(--hairline)}
+    .case-logic dt{font-family:var(--mono);font-size:.69rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+    .case-logic dd{margin:0}
+    .metrics{display:flex;flex-wrap:wrap;gap:30px 46px;margin-top:38px}
+    .metric{min-width:130px}
+    .metric strong{display:block;font-family:var(--serif);font-weight:400;font-size:clamp(2.7rem,4.4vw,5.4rem);line-height:.85;letter-spacing:-.045em}
+    .metric.primary strong{color:var(--vermilion)}
+    .metric span{display:block;margin-top:9px;font-size:.82rem;max-width:175px}
+    .visual{position:relative;min-height:620px;isolation:isolate}
+    .visual:before{content:"";position:absolute;inset:8% 3%;border-radius:44% 44% 12% 12%;background:radial-gradient(circle at 66% 35%,rgba(255,255,255,.75),rgba(255,255,255,.08) 48%,transparent 67%);z-index:-2}
+
+    .beams{position:absolute;inset:15% 0 14% 2%;display:flex;flex-direction:column;justify-content:center;gap:24px;transform:perspective(900px) rotateY(-7deg)}
+    .beam{height:50px;border-radius:3px;background:linear-gradient(90deg,#ddd5c8,#f7f4ee 50%,#d4cabb);box-shadow:0 18px 34px rgba(70,55,38,.13);position:relative}
+    .beam:nth-child(1){width:68%;margin-left:0}.beam:nth-child(2){width:82%;margin-left:7%}.beam:nth-child(3){width:94%;margin-left:1%}.beam:nth-child(4){width:74%;margin-left:19%}.beam:nth-child(5){width:88%;margin-left:10%}
+    .beam:after{content:"";position:absolute;right:10%;top:0;bottom:0;width:2px;background:var(--vermilion);opacity:.8}
+    .pipeline{position:absolute;left:5%;right:5%;bottom:6%;height:1px;background:var(--hairline)}
+    .pipeline:before{content:"40+ МЛН ₽ · PIPELINE";position:absolute;left:0;bottom:12px;font:700 .68rem var(--mono);letter-spacing:.09em}
+    .pipeline:after{content:"";position:absolute;right:0;top:50%;width:9px;height:9px;border-radius:50%;background:var(--vermilion);transform:translateY(-50%)}
+
+    .control{position:absolute;inset:10% 4%;display:grid;place-items:center}
+    .core{width:220px;height:220px;border-radius:50%;background:radial-gradient(circle at 36% 27%,#fff,#e2dbcf 62%,#cfc4b4);box-shadow:0 28px 70px rgba(60,47,31,.15),inset 0 0 0 1px rgba(20,18,15,.06);display:grid;place-items:center;font:700 .72rem var(--mono);letter-spacing:.12em;text-transform:uppercase;position:relative;z-index:3}
+    .orbit{position:absolute;border:1px solid var(--hairline);border-radius:50%}
+    .orbit.o1{width:390px;height:390px}.orbit.o2{width:560px;height:560px}.orbit.o3{width:730px;height:470px}
+    .node{position:absolute;width:118px;height:54px;border-radius:28px;background:rgba(246,242,235,.93);border:1px solid rgba(20,18,15,.08);box-shadow:0 16px 34px rgba(59,47,34,.1);display:grid;place-items:center;font:700 .68rem var(--mono);letter-spacing:.05em;text-align:center;z-index:4}
+    .n1{top:6%;left:22%}.n2{top:17%;right:5%}.n3{bottom:12%;right:12%}.n4{bottom:5%;left:19%}.n5{top:40%;left:0}.n6{top:3%;right:35%}
+    .core-lines{position:absolute;inset:0;background:conic-gradient(from 25deg at 50% 50%,transparent 0 8%,rgba(201,59,46,.24) 8.2% 8.5%,transparent 8.7% 25%,rgba(21,20,17,.13) 25.2% 25.5%,transparent 25.7% 45%,rgba(21,20,17,.13) 45.2% 45.5%,transparent 45.7% 66%,rgba(201,59,46,.24) 66.2% 66.5%,transparent 66.7%);mask:radial-gradient(circle at center,transparent 0 108px,#000 110px);z-index:1}
+
+    .stream{position:absolute;inset:12% 0 10% 0}
+    .stream .loose{position:absolute;left:0;top:13%;width:38%;height:70%}
+    .flake{position:absolute;width:54px;height:38px;background:linear-gradient(145deg,#f7f4ee,#d9d0c3);box-shadow:0 11px 22px rgba(55,43,29,.1);transform:rotate(var(--r));left:var(--x);top:var(--y)}
+    .stream-path{position:absolute;left:24%;right:0;top:25%;height:48%;display:flex;align-items:center}
+    .layer{height:100%;flex:1;background:linear-gradient(90deg,rgba(221,212,199,.25),#f7f4ee 45%,#d7cdbf);border-left:1px solid rgba(21,20,17,.08);box-shadow:12px 18px 35px rgba(58,45,30,.08);transform:skewY(var(--sk));margin-left:-16px}
+    .stream-line{position:absolute;left:15%;right:4%;top:51%;height:2px;background:var(--vermilion);z-index:5}
+    .stream-line:after{content:"";position:absolute;right:0;top:50%;width:10px;height:10px;border-radius:50%;background:var(--vermilion);transform:translateY(-50%)}
+    .stream-labels{position:absolute;left:24%;right:0;top:16%;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;font:700 .68rem var(--mono);letter-spacing:.06em;text-transform:uppercase;text-align:center}
+
+    .pavilion{position:absolute;inset:10% 6%;display:grid;place-items:center;perspective:900px}
+    .pavilion-stage{width:min(670px,92%);height:420px;position:relative;transform:rotateX(4deg) rotateY(-5deg)}
+    .pavilion-floor{position:absolute;left:0;right:0;bottom:0;height:42%;background:linear-gradient(165deg,#ded5c7,#f4efe7);clip-path:polygon(8% 0,100% 0,88% 100%,0 100%);box-shadow:0 30px 60px rgba(62,49,34,.14)}
+    .pavilion-core{position:absolute;left:32%;top:8%;width:40%;height:64%;border-radius:120px 120px 16px 16px;background:linear-gradient(100deg,#d7ccbd,#faf8f2 55%,#d8cdbf);box-shadow:24px 26px 50px rgba(57,44,30,.14),inset -18px 0 24px rgba(75,59,42,.05)}
+    .pavilion-core:before{content:"";position:absolute;left:50%;bottom:0;width:34%;height:55%;transform:translateX(-50%);border-radius:70px 70px 0 0;background:linear-gradient(90deg,#cabdad,#fff);box-shadow:inset 12px 0 22px rgba(50,38,25,.08)}
+    .pavilion-ring{position:absolute;left:18%;right:13%;top:32%;height:38%;border:1px solid var(--vermilion);border-radius:50%;transform:rotateX(70deg);opacity:.72}
+    .pavilion-dot{position:absolute;right:15%;top:51%;width:10px;height:10px;border-radius:50%;background:var(--vermilion)}
+
+    .approach{background:#ded6ca}
+    .approach-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(50px,8vw,150px)}
+    .approach-list{display:grid;border-top:1px solid var(--hairline)}
+    .approach-item{display:flex;align-items:center;justify-content:space-between;padding:22px 0;border-bottom:1px solid var(--hairline);font-size:clamp(1.25rem,2vw,2rem)}
+    .approach-item span:last-child{font:700 .68rem var(--mono);color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+    .approach-thesis{font-family:var(--serif);font-size:clamp(3rem,5vw,6.3rem);line-height:.95;letter-spacing:-.05em;margin:0;align-self:end}
+    .approach-thesis em{font-style:normal;color:var(--vermilion)}
+
+    .track{background:var(--paper)}
+    .track-line{position:relative;display:grid;gap:0;margin-left:clamp(0px,7vw,120px);max-width:1050px;border-left:1px solid var(--hairline)}
+    .track-row{display:grid;grid-template-columns:190px 1fr;gap:clamp(30px,5vw,80px);padding:28px 0 48px 42px;position:relative}
+    .track-row:before{content:"";position:absolute;left:-5px;top:36px;width:9px;height:9px;border-radius:50%;background:var(--ivory);border:1px solid var(--vermilion)}
+    .track-row .year{font:700 .72rem var(--mono);letter-spacing:.1em;color:var(--muted)}
+    .track-row h3{font-family:var(--serif);font-size:clamp(1.8rem,3vw,3.7rem);line-height:1;margin:0 0 12px;font-weight:400;letter-spacing:-.035em}
+    .track-row p{margin:0;color:var(--muted);max-width:670px}
+
+    .education{background:#ece6dc}
+    .education-list{max-width:1040px;margin-left:auto;display:grid;border-top:1px solid var(--hairline)}
+    .education-row{display:grid;grid-template-columns:180px 1fr;gap:40px;padding:26px 0;border-bottom:1px solid var(--hairline)}
+    .education-row .year{font:700 .7rem var(--mono);letter-spacing:.08em;color:var(--muted)}
+    .education-row strong{font-weight:500;font-size:1.15rem}
+    .education-row span{display:block;color:var(--muted);margin-top:5px}
+
+    .contact{min-height:820px;background:#dcd3c6;position:relative;overflow:hidden;isolation:isolate}
+    .contact:before{content:"";position:absolute;right:-5%;top:5%;width:55%;height:85%;border-radius:48% 48% 0 0;background:linear-gradient(100deg,#cfc4b5,#f6f2eb 55%,#d6ccbd);box-shadow:-36px 30px 80px rgba(70,54,37,.12),inset 20px 0 30px rgba(45,34,23,.05);z-index:-2}
+    .contact:after{content:"";position:absolute;right:14%;bottom:0;width:23%;height:64%;border-radius:170px 170px 0 0;background:linear-gradient(90deg,#c8bdad,#fff);box-shadow:inset 18px 0 28px rgba(55,42,28,.08);z-index:-1}
+    .contact-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:80px;align-items:end;min-height:620px}
+    .contact-title{font-size:clamp(4.6rem,9vw,11rem);line-height:.82;margin:0;max-width:7ch}
+    .contact-title .red{color:var(--vermilion)}
+    .contact-links{display:grid;align-self:center;border-top:1px solid var(--hairline);max-width:520px}
+    .contact-link{display:grid;grid-template-columns:130px 1fr;gap:30px;padding:20px 0;border-bottom:1px solid var(--hairline)}
+    .contact-link span:first-child{font:700 .7rem var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+    .contact-link span:last-child{font-size:1.06rem}
+    .contact-meta{margin-top:34px;color:var(--muted)}
+    .footer{display:flex;justify-content:space-between;gap:30px;padding-block:28px;border-top:1px solid var(--hairline);font-size:.76rem;text-transform:uppercase;letter-spacing:.05em}
+
+    @media (max-width:1100px){
+      .hero-grid{grid-template-columns:1fr .8fr}.hero-aside{grid-column:1;align-self:end;margin-bottom:110px}.hero-portrait-wrap{grid-column:2;grid-row:1 / span 2}
+      .hero-bottom .note{display:none}.section-head,.context-grid,.case-layout,.approach-grid,.contact-grid{grid-template-columns:1fr}.case-layout{gap:70px}.case-copy h2{max-width:14ch}.visual{min-height:560px}.contact-grid{align-items:start}.contact-links{margin-left:auto;width:min(100%,540px)}
+    }
+    @media (max-width:760px){
+      :root{--page:calc(100vw - 12px);--radius:24px}
+      body{font-size:16px}.site{margin:6px auto 20px}
+      .shell{padding-inline:22px}
+      .site-header{height:64px}.nav{position:absolute;left:0;right:0;top:64px;background:rgba(238,233,223,.98);display:none;flex-direction:column;align-items:flex-start;padding:18px 22px 28px;border-bottom:1px solid var(--hairline);gap:4px;backdrop-filter:blur(12px)}.nav.open{display:flex}.nav-dot{display:none}.menu-button{display:block}
+      .hero{min-height:auto;padding-bottom:0}
+      .hero:before{background:linear-gradient(180deg,#f2eee7,#e7ded2)}
+      .hero:after{right:-16%;top:27%;width:72%;height:46%;border-radius:130px 130px 0 0;opacity:.7}
+      .hero-grid{display:flex;flex-direction:column;align-items:stretch;padding-block:48px 0;gap:0}
+      .hero-copy{order:1}.hero-title{font-size:clamp(4rem,20vw,6.2rem);line-height:.82;margin-bottom:26px;max-width:7ch}.hero-id{font-size:.92rem}.hero-id strong{font-size:1.15rem}
+      .hero-portrait-wrap{order:2;width:calc(100% + 44px);margin-left:-22px;height:510px;margin-top:18px;align-self:auto;background:transparent!important;overflow:visible!important}
+      .hero-portrait{height:100%;max-width:none;bottom:0;background:transparent!important;box-shadow:none!important;filter:none!important}
+      .hero-aside{order:3;margin:0;padding:26px 0 34px;max-width:none;border-top:1px solid var(--hairline);gap:20px}.hero-aside p{font-size:1rem;max-width:32ch}
+      .hero-bottom{position:relative;left:auto;right:auto;bottom:auto;order:4;padding:24px 0 30px;display:block}.hero-bottom .thesis{font-size:1.8rem}.hero-bottom .note{display:block;margin-top:12px}
+      .section{padding-block:82px}.section-head{gap:28px;margin-bottom:62px}.section-title{font-size:clamp(3.3rem,15vw,5rem)}.section-lead{font-size:1.25rem}
+      .context-grid{gap:48px}.context-statement{font-size:clamp(3.1rem,13vw,4.7rem)}.context-data{padding-left:22px;gap:24px}.context-data strong{font-size:3rem}
+      .case{min-height:auto}.case-layout{gap:56px}.case-copy h2{font-size:clamp(3rem,13vw,4.8rem);max-width:10ch}.case-copy>p{font-size:1rem}.case-logic div{grid-template-columns:1fr;gap:5px;padding:15px 0}.metrics{display:grid;grid-template-columns:1fr 1fr;gap:28px 18px}.metric{min-width:0}.metric strong{font-size:3.1rem}.metric span{font-size:.76rem}
+      .visual{min-height:440px;margin-inline:-8px}.beams{gap:18px}.beam{height:36px}.pipeline:before{font-size:.58rem}.core{width:150px;height:150px}.orbit.o1{width:250px;height:250px}.orbit.o2{width:355px;height:355px}.orbit.o3{width:430px;height:300px}.node{width:90px;height:42px;font-size:.55rem}.n1{left:7%}.n2{right:-1%}.n3{right:1%}.n4{left:7%}.n5{left:-3%}.n6{right:27%}.stream{inset:8% -4%}.flake{width:35px;height:25px}.stream-labels{font-size:.52rem;left:18%;grid-template-columns:repeat(4,1fr)}.stream-path{left:18%}.pavilion-stage{height:330px}.pavilion-core{left:26%;width:50%}
+      .approach-grid{gap:60px}.approach-thesis{font-size:clamp(3rem,13vw,4.7rem)}.approach-item{font-size:1.25rem}
+      .track-line{margin-left:5px}.track-row{grid-template-columns:1fr;padding:25px 0 38px 25px;gap:8px}.track-row h3{font-size:2.3rem}
+      .education-list{margin-left:0}.education-row{grid-template-columns:1fr;gap:8px}
+      .contact{min-height:auto}.contact:before{width:88%;height:58%;right:-30%;top:40%}.contact:after{width:38%;height:46%;right:2%}.contact-grid{min-height:690px;gap:70px}.contact-title{font-size:clamp(4.2rem,19vw,6.3rem)}.contact-links{margin-left:0;width:100%}.contact-link{grid-template-columns:94px 1fr;gap:16px}.footer{flex-direction:column;gap:8px}
+    }
+    @media (max-width:420px){
+      .hero-portrait-wrap{height:470px}.metrics{grid-template-columns:1fr 1fr}.visual{min-height:410px}.node{width:82px}.n6{right:19%}
+    }
+    @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+  </style>
+</head>
+<body>
+  <main class="site" id="top">
+    <header class="site-header shell">
+      <a class="logo" href="#top" aria-label="На главную">AV</a>
+      <button class="menu-button" type="button" aria-expanded="false" aria-controls="main-nav">Меню</button>
+      <nav class="nav" id="main-nav" aria-label="Основная навигация">
+        <a href="#about">Обо мне</a><a href="#cases">Опыт</a><a href="#approach">Подход</a><a href="#contact">Контакты</a><span class="nav-dot" aria-hidden="true"></span>
+      </nav>
+    </header>
+
+    <section class="hero shell" aria-labelledby="hero-title">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <h1 class="hero-title serif" id="hero-title"><span>GROWTH</span><span>NEEDS</span><span>SPACE<span class="dot">●</span></span></h1>
+          <div class="hero-id"><strong>Алина Васильева</strong><span>Commercial Director / CCO</span></div>
+        </div>
+        <div class="hero-portrait-wrap" aria-label="Портрет Алины Васильевой">
+          <img class="hero-portrait" src="./assets/references/alina-portrait-transparent.png" onerror="this.onerror=null;this.src='./alina-portrait-transparent.png'" alt="Алина Васильева сидит на высоком стуле" fetchpriority="high">
+        </div>
+        <div class="hero-aside">
+          <p>Строю системы роста через стратегию, экономику, продажи, процессы и сильные команды.</p>
+          <p>12 лет управляю направлениями и отвечаю за коммерческий результат и P&amp;L.</p>
+          <a class="hero-link" href="#cases">Смотреть кейсы</a>
+        </div>
+        <div class="hero-bottom">
+          <div class="thesis">Росту нужна ясная архитектура.</div>
+          <div class="note">Стратегия · Экономика · Продажи · Процессы · Команда · Аналитика.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section scale-context shell" id="about">
+      <div class="section-head">
+        <p class="eyebrow">Контекст масштаба</p>
+        <p class="section-lead">Соединяю стратегию и экономику с реальной операционной системой бизнеса — от продукта и продаж до процессов, аналитики и ответственности.</p>
+      </div>
+      <div class="context-grid">
+        <p class="context-statement">Не больше действий.<br><em>Точнее система.</em></p>
+        <div class="context-data">
+          <p><strong>12 лет</strong>управленческого опыта</p>
+          <p><strong>600+</strong>проектов в маркетинге, digital, design и PR</p>
+          <p>Ответственность за P&amp;L всей компании и полный коммерческий контур.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section cases-intro shell" id="cases">
+      <div class="section-head">
+        <h2 class="section-title serif">CASES.</h2>
+        <p class="section-lead">Результаты, подтверждённые цифрами. Каждый кейс — отдельная система изменений.</p>
+      </div>
+      <div class="cases-intro-line" aria-hidden="true"></div>
+    </section>
+
+    <section class="section case shell">
+      <div class="case-layout">
+        <div class="case-copy">
+          <p class="label">Коммерческое управление</p>
+          <h2 class="serif">Масштабирование направления</h2>
+          <p>Пересобрала лидогенерацию, пресейл, тендеры, коммерческие предложения, контроль маржинальности и прогноз сделок.</p>
+          <dl class="case-logic">
+            <div><dt>До</dt><dd>Набор разрозненных услуг без единой коммерческой модели.</dd></div>
+            <div><dt>Решение</dt><dd>Самостоятельный бизнес-контур: продукт, продажи, команда, тендеры, экономика и прогноз.</dd></div>
+          </dl>
+          <div class="metrics">
+            <div class="metric primary"><strong>×4,7</strong><span>рост оборота</span></div>
+            <div class="metric"><strong>×8,3</strong><span>рост маржинальной прибыли</span></div>
+            <div class="metric"><strong>8</strong><span>запусков</span></div>
+            <div class="metric"><strong>2</strong><span>выигранных тендера</span></div>
+          </div>
+        </div>
+        <div class="visual" aria-label="Архитектурная конструкция масштабирования">
+          <div class="beams"><div class="beam"></div><div class="beam"></div><div class="beam"></div><div class="beam"></div><div class="beam"></div></div>
+          <div class="pipeline"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section case shell">
+      <div class="case-layout">
+        <div class="case-copy">
+          <p class="label">Операционное управление</p>
+          <h2 class="serif">Рост выручки и автоматизация</h2>
+          <p>Объединила продажи, проекты, финансы, аналитику и ответственность в единый управленческий контур.</p>
+          <dl class="case-logic">
+            <div><dt>Проблематика</dt><dd>Бизнес упёрся в операционный потолок, а ключевые процессы держались на собственнике.</dd></div>
+            <div><dt>Система</dt><dd>Битрикс24, 1С, DataLens, AI, финансовый контур и сильная команда руководителей.</dd></div>
+          </dl>
+          <div class="metrics">
+            <div class="metric primary"><strong>+71%</strong><span>выручка год к году</span></div>
+            <div class="metric"><strong>41</strong><span>проект за год</span></div>
+            <div class="metric"><strong>28</strong><span>клиентов</span></div>
+            <div class="metric"><strong>7</strong><span>новых клиентов</span></div>
+          </div>
+        </div>
+        <div class="visual" aria-label="Единый управленческий контур">
+          <div class="control"><div class="core-lines"></div><div class="orbit o1"></div><div class="orbit o2"></div><div class="orbit o3"></div><div class="core">единый<br>контур</div><div class="node n1">Продажи</div><div class="node n2">Финансы</div><div class="node n3">Аналитика</div><div class="node n4">Проекты</div><div class="node n5">Ответственность</div><div class="node n6">Команда</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section case shell">
+      <div class="case-layout">
+        <div class="case-copy">
+          <p class="label">E-commerce / продукт</p>
+          <h2 class="serif">Развитие интернет-магазина</h2>
+          <p>Связала производство контента, каталог, маркетинг и аналитику в управляемый путь от интереса к заявке.</p>
+          <dl class="case-logic">
+            <div><dt>Проблематика</dt><dd>Большой ассортимент не превращался в сопоставимый объём продаж; путь пользователя терял заявки.</dd></div>
+            <div><dt>На выходе</dt><dd>Единая система контента, управляемые карточки, непрерывная аналитика и короткий маршрут к заявке.</dd></div>
+          </dl>
+          <div class="metrics">
+            <div class="metric primary"><strong>×3</strong><span>рост заявок</span></div>
+            <div class="metric"><strong>×5</strong><span>объём контента</span></div>
+            <div class="metric"><strong>0,4→0,86%</strong><span>рост конверсии</span></div>
+          </div>
+        </div>
+        <div class="visual" aria-label="Путь от контента к заявке">
+          <div class="stream">
+            <div class="loose">
+              <i class="flake" style="--x:2%;--y:12%;--r:-12deg"></i><i class="flake" style="--x:17%;--y:4%;--r:8deg"></i><i class="flake" style="--x:31%;--y:24%;--r:-6deg"></i><i class="flake" style="--x:6%;--y:42%;--r:14deg"></i><i class="flake" style="--x:28%;--y:54%;--r:-16deg"></i><i class="flake" style="--x:47%;--y:12%;--r:6deg"></i><i class="flake" style="--x:54%;--y:48%;--r:13deg"></i><i class="flake" style="--x:13%;--y:72%;--r:-7deg"></i>
+            </div>
+            <div class="stream-labels"><span>Контент</span><span>Каталог</span><span>Интерес</span><span>Заявка</span></div>
+            <div class="stream-path"><div class="layer" style="--sk:-7deg"></div><div class="layer" style="--sk:5deg"></div><div class="layer" style="--sk:-3deg"></div><div class="layer" style="--sk:1deg"></div></div>
+            <div class="stream-line"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section case shell">
+      <div class="case-layout">
+        <div class="case-copy">
+          <p class="label">Новый продукт</p>
+          <h2 class="serif">Запуск нового бизнес-юнита</h2>
+          <p>Создала самостоятельную коммерческую систему: от идеи и MVP до устойчивого потока лидов и собственной экономики.</p>
+          <dl class="case-logic">
+            <div><dt>Логика</dt><dd>Идея → MVP → первые клиенты → pipeline → повторные продажи → денежный поток.</dd></div>
+            <div><dt>Результат</dt><dd>Автономное направление с высокой маржинальностью и органической лидогенерацией.</dd></div>
+          </dl>
+          <div class="metrics">
+            <div class="metric primary"><strong>80%+</strong><span>маржинальность</span></div>
+            <div class="metric"><strong>40</strong><span>лидов в месяц</span></div>
+            <div class="metric"><strong>0 ₽</strong><span>рекламного бюджета</span></div>
+          </div>
+        </div>
+        <div class="visual" aria-label="Автономный бизнес-юнит">
+          <div class="pavilion"><div class="pavilion-stage"><div class="pavilion-floor"></div><div class="pavilion-core"></div><div class="pavilion-ring"></div><div class="pavilion-dot"></div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section approach shell" id="approach">
+      <div class="section-head"><p class="eyebrow">Подход</p><p class="section-lead">Не набор услуг, а управленческая система, в которой каждый элемент связан с коммерческим результатом.</p></div>
+      <div class="approach-grid">
+        <div class="approach-list"><div class="approach-item"><span>Стратегия</span><span>направление</span></div><div class="approach-item"><span>Экономика</span><span>P&amp;L</span></div><div class="approach-item"><span>Продукт</span><span>ценность</span></div><div class="approach-item"><span>Продажи</span><span>pipeline</span></div><div class="approach-item"><span>Процессы</span><span>система</span></div><div class="approach-item"><span>Команда</span><span>ответственность</span></div><div class="approach-item"><span>Аналитика</span><span>решения</span></div></div>
+        <p class="approach-thesis">Рост возникает из <em>точности решений</em>, ясной структуры и правильно организованного пространства.</p>
+      </div>
+    </section>
+
+    <section class="section track shell">
+      <div class="section-head"><h2 class="section-title serif">Управленческий трек</h2><p class="section-lead">12 лет роста ответственности: от маркетинговых и digital-направлений до управления коммерческим блоком и P&amp;L всей компании.</p></div>
+      <div class="track-line">
+        <article class="track-row"><div class="year">ТЕКУЩИЙ УРОВЕНЬ</div><div><h3>Commercial Director / CCO</h3><p>Коммерческий результат, P&amp;L, продуктовый и клиентский контур, управление руководителями функций.</p></div></article>
+        <article class="track-row"><div class="year">МАСШТАБ</div><div><h3>Strategy · Digital · Design · PR</h3><p>Связь продуктовой стратегии, маркетинга, продаж, аналитики, процессов и команды в единую систему.</p></div></article>
+        <article class="track-row"><div class="year">ФОКУС</div><div><h3>Изменения, которые работают</h3><p>Не концепция ради концепции, а система, доведённая до управляемого коммерческого результата.</p></div></article>
+      </div>
+    </section>
+
+    <section class="section education shell">
+      <div class="section-head"><h2 class="section-title serif">Образование и развитие</h2><p class="section-lead">Системно дополняю управленческий опыт программами по бизнес-анализу, финансам, маркетингу и работе с командами.</p></div>
+      <div class="education-list">
+        <div class="education-row"><div class="year">2026</div><div><strong>ASPEX — Бизнес-анализ</strong><span>Старт в 1С</span></div></div>
+        <div class="education-row"><div class="year">2025</div><div><strong>Re:start / Ирина Хакамада</strong><span>SETTERS — Управление и мотивация команд</span></div></div>
+        <div class="education-row"><div class="year">2024</div><div><strong>Новый шаг</strong></div></div>
+        <div class="education-row"><div class="year">2023</div><div><strong>Формула прибыли / Илья Балахнин</strong></div></div>
+        <div class="education-row"><div class="year">2022</div><div><strong>Qmarketing Academy — Директор по маркетингу</strong><span>Яндекс.Директ — сертификат</span></div></div>
+        <div class="education-row"><div class="year">2019</div><div><strong>Visotsky Consulting</strong></div></div>
+        <div class="education-row"><div class="year">2015</div><div><strong>СПбГУП — высшее образование</strong><span>Журналист</span></div></div>
+        <div class="education-row"><div class="year">2010 / 2009</div><div><strong>Школа журналистики СПбГУП</strong><span>Малый журфак НовГУ</span></div></div>
+      </div>
+    </section>
+
+    <section class="section contact shell" id="contact">
+      <div class="contact-grid">
+        <div><p class="eyebrow">Контакты</p><h2 class="contact-title serif">LET’S BUILD THE NEXT <span class="red">GROWTH</span> SYSTEM.</h2></div>
+        <div><div class="contact-links"><a class="contact-link" href="mailto:alinavasileva.jour@gmail.com"><span>Email</span><span>alinavasileva.jour@gmail.com</span></a><a class="contact-link" href="https://t.me/AlinaVasileva" target="_blank" rel="noopener"><span>Telegram</span><span>@AlinaVasileva</span></a><a class="contact-link" href="tel:+79818885389"><span>Телефон</span><span>+7 981 888 53 89</span></a></div><p class="contact-meta">Москва / Санкт-Петербург · гибридный формат работы</p></div>
+      </div>
+      <footer class="footer"><span>Алина Васильева · Commercial Director / CCO</span><a href="#top">Наверх</a></footer>
+    </section>
+  </main>
+  <script>
+    const button=document.querySelector('.menu-button');
+    const nav=document.querySelector('#main-nav');
+    button?.addEventListener('click',()=>{const open=nav.classList.toggle('open');button.setAttribute('aria-expanded',String(open));});
+    nav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');button?.setAttribute('aria-expanded','false');}));
+  </script>
+</body>
+</html>
