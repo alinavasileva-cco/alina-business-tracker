@@ -1,0 +1,88 @@
+/* Final hero-only portrait integration */
+.hero__portrait {
+  position: absolute !important;
+  left: 50% !important;
+  bottom: 24px !important;
+  z-index: 5 !important;
+  width: min(43vw, 760px) !important;
+  height: calc(100% - var(--header-h) - 52px) !important;
+  margin: 0 !important;
+  transform: translateX(-50%) !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: center !important;
+  overflow: visible !important;
+  pointer-events: none !important;
+}
+.hero__portrait img {
+  position: static !important;
+  display: block !important;
+  width: auto !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  margin: 0 !important;
+  transform: none !important;
+  object-fit: contain !important;
+  object-position: center bottom !important;
+  filter: drop-shadow(0 22px 28px rgba(55,44,34,.12)) !important;
+}
+
+/* Preview only the approved main screen while it is being approved. */
+.case,
+.contact { display: none !important; }
+
+@media (max-width: 1024px) {
+  .hero__portrait {
+    left: 52% !important;
+    width: min(48vw, 650px) !important;
+    height: calc(100% - var(--header-h) - 70px) !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero {
+    min-height: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding-bottom: 0 !important;
+  }
+  .hero__word--left,
+  .hero__word--right,
+  .hero__copy {
+    position: relative !important;
+    inset: auto !important;
+  }
+  .hero__word--right { margin-top: -4px !important; }
+  .hero__copy {
+    width: 100% !important;
+    margin-top: 28px !important;
+  }
+  .hero__portal {
+    top: auto !important;
+    right: 4% !important;
+    bottom: 0 !important;
+    left: auto !important;
+    width: 72% !important;
+    height: min(118vw, 680px) !important;
+  }
+  .hero__portrait {
+    position: relative !important;
+    left: auto !important;
+    bottom: auto !important;
+    width: 100% !important;
+    height: min(118vw, 680px) !important;
+    margin: 28px auto 0 !important;
+    transform: none !important;
+  }
+  .hero__portrait img {
+    width: auto !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    object-fit: contain !important;
+    object-position: center bottom !important;
+  }
+  .hero__principles,
+  .hero__footer { display: none !important; }
+}
