@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#E4D7CB">
-  <meta name="description" content="Главный экран персонального сайта Алины Васильевой.">
+  <meta name="description" content="Главный экран персонального сайта Алины Васильевой — финальная итерация для согласования.">
   <title>Алина Васильева — главная</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..700&family=Manrope:wght@300..800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./hero-preview.css?v=11.0.0">
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda+SC:opsz,wght@6..96,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./hero-preview.css?v=11.1.0">
 </head>
 <body>
   <a class="skip-link" href="#hero">К главному экрану</a>
@@ -31,6 +31,7 @@
         <a href="./index.html#contact">Контакты</a>
         <i class="nav-dot" aria-hidden="true"></i>
       </nav>
+      <span class="header-line" aria-hidden="true"></span>
     </header>
 
     <main class="hero-stage" id="hero" aria-labelledby="hero-name">
@@ -40,9 +41,12 @@
         <div class="architecture-niche"></div>
         <div class="architecture-reveal architecture-reveal--right"></div>
         <div class="architecture-wall architecture-wall--right"></div>
-        <div class="architecture-floor"></div>
-        <div class="architecture-floor-shadow architecture-floor-shadow--left"></div>
-        <div class="architecture-floor-shadow architecture-floor-shadow--right"></div>
+        <div class="architecture-floor">
+          <i class="floor-shadow floor-shadow--one"></i>
+          <i class="floor-shadow floor-shadow--two"></i>
+          <i class="floor-shadow floor-shadow--three"></i>
+          <i class="floor-shadow floor-shadow--four"></i>
+        </div>
       </div>
 
       <div class="hero-content">
@@ -61,10 +65,10 @@
         </section>
 
         <section class="hero-content__center" aria-label="Портрет Алины Васильевой">
-          <div class="portrait-contact-shadow" aria-hidden="true"></div>
+          <span class="portrait-contact-shadow" aria-hidden="true"></span>
           <figure class="hero-portrait" data-reveal>
             <img
-              src="./v4/assets/portrait/alina-portrait-rgba-final.png?v=11.0.0"
+              src="./v4/assets/portrait/alina-portrait-rgba-final.png?v=11.1.0"
               alt="Алина Васильева в чёрном образе сидит на высоком стуле в красных туфлях"
               width="595"
               height="1938"
@@ -99,17 +103,14 @@
             <span>коммерческих проектов</span>
           </div>
         </div>
-
-        <div class="hero-floor-facts__right">
-          <div class="hero-fact hero-fact--wide" data-reveal>
-            <strong>Более 500 млн</strong>
-            <span>помогла заработать компаниям</span>
-          </div>
+        <div class="hero-floor-facts__right" data-reveal>
+          <strong>Более 500 млн</strong>
+          <span>помогла заработать компаниям</span>
         </div>
       </section>
     </main>
   </div>
 
-  <script src="./hero-preview.js?v=11.0.0"></script>
+  <script src="./hero-preview.js?v=11.1.0"></script>
 </body>
 </html>
