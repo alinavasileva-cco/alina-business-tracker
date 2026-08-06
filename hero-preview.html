@@ -3,15 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#EEE8DE">
-  <meta name="description" content="Главный экран персонального сайта Алины Васильевой — рабочая итерация для согласования.">
-  <title>Алина Васильева — согласование главной</title>
-  <link rel="stylesheet" href="./hero-preview.css?v=10.0.0">
+  <meta name="theme-color" content="#E4D7CB">
+  <meta name="description" content="Главный экран персонального сайта Алины Васильевой.">
+  <title>Алина Васильева — главная</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..700&family=Manrope:wght@300..800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./hero-preview.css?v=11.0.0">
 </head>
 <body>
   <a class="skip-link" href="#hero">К главному экрану</a>
 
-  <div class="hero-page">
+  <div class="hero-shell">
     <header class="site-header" data-header>
       <a class="brand" href="#hero" aria-label="Алина Васильева — наверх">AV</a>
 
@@ -30,64 +33,83 @@
       </nav>
     </header>
 
-    <main class="hero-main" id="hero" aria-labelledby="hero-name">
-      <section class="hero-zone hero-left">
-        <p class="hero-word hero-word--growth" aria-hidden="true" data-reveal>Growth</p>
+    <main class="hero-stage" id="hero" aria-labelledby="hero-name">
+      <div class="hero-architecture" aria-hidden="true">
+        <div class="architecture-wall architecture-wall--left"></div>
+        <div class="architecture-reveal architecture-reveal--left"></div>
+        <div class="architecture-niche"></div>
+        <div class="architecture-reveal architecture-reveal--right"></div>
+        <div class="architecture-wall architecture-wall--right"></div>
+        <div class="architecture-floor"></div>
+        <div class="architecture-floor-shadow architecture-floor-shadow--left"></div>
+        <div class="architecture-floor-shadow architecture-floor-shadow--right"></div>
+      </div>
 
-        <div class="hero-copy" data-reveal>
-          <h1 id="hero-name">Алина Васильева</h1>
-          <p class="hero-role">Бизнес-трекер · Коммерческий директор / CCO ·<br>Head of Business Development</p>
-          <div class="hero-lead">
-            <p>Строю коммерческие системы и точки роста: соединяю продажи, маркетинг, процессы, аналитику и команду в управляемую модель результата.</p>
-            <p>Работаю с собственниками и C-level — от диагностики и стратегии до внедрения изменений и измеримого эффекта.</p>
+      <div class="hero-content">
+        <section class="hero-content__left">
+          <p class="hero-word hero-word--growth" aria-hidden="true" data-reveal>Growth</p>
+
+          <div class="hero-copy" data-reveal>
+            <h1 id="hero-name">Алина Васильева</h1>
+            <p class="hero-role">Бизнес-трекер · Коммерческий директор / CCO ·<br>Head of Business Development</p>
+            <div class="hero-lead">
+              <p>Строю коммерческие системы и точки роста: соединяю продажи, маркетинг, процессы, аналитику и команду в управляемую модель результата.</p>
+              <p>Работаю с собственниками и C-level — от диагностики и стратегии до внедрения изменений и измеримого эффекта.</p>
+            </div>
+            <a class="hero-cta" href="./index.html#contact"><span>Решить бизнес-задачу</span></a>
           </div>
-          <a class="hero-cta" href="./index.html#contact"><span>Решить бизнес-задачу</span></a>
+        </section>
+
+        <section class="hero-content__center" aria-label="Портрет Алины Васильевой">
+          <div class="portrait-contact-shadow" aria-hidden="true"></div>
+          <figure class="hero-portrait" data-reveal>
+            <img
+              src="./v4/assets/portrait/alina-portrait-rgba-final.png?v=11.0.0"
+              alt="Алина Васильева в чёрном образе сидит на высоком стуле в красных туфлях"
+              width="595"
+              height="1938"
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+            >
+          </figure>
+        </section>
+
+        <section class="hero-content__right">
+          <p class="hero-word hero-word--needs" aria-hidden="true" data-reveal>
+            <span>Needs</span>
+            <span class="accent">Space.</span>
+          </p>
+
+          <a class="hero-telegram" href="https://t.me/AlinaVasileva" target="_blank" rel="noopener noreferrer" aria-label="Открыть Telegram Алины Васильевой" data-reveal>
+            <small>Telegram</small>
+            <strong>@AlinaVasileva</strong>
+          </a>
+        </section>
+      </div>
+
+      <section class="hero-floor-facts" aria-label="Ключевые факты">
+        <div class="hero-floor-facts__left">
+          <div class="hero-fact" data-reveal>
+            <strong>12 лет</strong>
+            <span>управленческого опыта</span>
+          </div>
+          <div class="hero-fact" data-reveal>
+            <strong>600+</strong>
+            <span>коммерческих проектов</span>
+          </div>
+        </div>
+
+        <div class="hero-floor-facts__right">
+          <div class="hero-fact hero-fact--wide" data-reveal>
+            <strong>Более 500 млн</strong>
+            <span>помогла заработать компаниям</span>
+          </div>
         </div>
       </section>
-
-      <section class="hero-zone hero-center" aria-label="Портрет Алины Васильевой">
-        <figure class="hero-portrait" data-reveal>
-          <img
-            src="./v4/assets/portrait/alina-portrait-rgba-final.png?v=10.0.0"
-            alt="Алина Васильева в чёрном образе сидит на высоком стуле в красных туфлях"
-            width="595"
-            height="1938"
-            loading="eager"
-            fetchpriority="high"
-            decoding="async"
-          >
-        </figure>
-      </section>
-
-      <section class="hero-zone hero-right">
-        <p class="hero-word hero-word--needs" aria-hidden="true" data-reveal>
-          <span>Needs</span>
-          <span class="accent">Space.</span>
-        </p>
-
-        <a class="hero-telegram" href="https://t.me/AlinaVasileva" target="_blank" rel="noopener noreferrer" aria-label="Открыть Telegram Алины Васильевой" data-reveal>
-          <small>Telegram</small>
-          <strong>@AlinaVasileva</strong>
-        </a>
-      </section>
     </main>
-
-    <section class="hero-facts" aria-label="Ключевые факты">
-      <div class="hero-fact" data-reveal>
-        <strong>12 лет</strong>
-        <span>управленческого опыта</span>
-      </div>
-      <div class="hero-fact" data-reveal>
-        <strong>600+</strong>
-        <span>коммерческих проектов</span>
-      </div>
-      <div class="hero-fact hero-fact--wide" data-reveal>
-        <strong>Более 500 млн</strong>
-        <span>помогла заработать компаниям</span>
-      </div>
-    </section>
   </div>
 
-  <script src="./hero-preview.js?v=10.0.0"></script>
+  <script src="./hero-preview.js?v=11.0.0"></script>
 </body>
 </html>
