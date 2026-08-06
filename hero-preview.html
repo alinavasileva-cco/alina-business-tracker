@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#EEE8DE">
   <meta name="description" content="Главный экран персонального сайта Алины Васильевой — рабочая итерация для согласования.">
   <title>Алина Васильева — согласование главной</title>
-  <link rel="stylesheet" href="./hero-preview.css?v=8.0.1">
+  <link rel="stylesheet" href="./hero-preview.css?v=9.0.0">
 </head>
 <body>
   <a class="skip-link" href="#hero">К главному экрану</a>
@@ -22,52 +22,56 @@
 
       <nav class="site-nav" id="site-nav" aria-label="Основная навигация">
         <a href="#hero">Обо мне</a>
-        <a href="#services">Услуги</a>
-        <a href="#cases">Кейсы</a>
-        <a href="#experience">Опыт</a>
-        <a href="#contact">Контакты</a>
+        <a href="./index.html#services">Услуги</a>
+        <a href="./index.html#cases">Кейсы</a>
+        <a href="./index.html#experience">Опыт</a>
+        <a href="./index.html#contact">Контакты</a>
         <i class="nav-dot" aria-hidden="true"></i>
       </nav>
     </header>
 
-    <main class="hero" id="hero" aria-labelledby="hero-name">
-      <div class="hero__scene">
-        <p class="hero__word hero__word--growth" aria-hidden="true" data-reveal>Growth</p>
+    <main class="hero-main" id="hero" aria-labelledby="hero-name">
+      <section class="hero-zone hero-left">
+        <p class="hero-word hero-word--growth" aria-hidden="true" data-reveal>Growth</p>
 
-        <div class="hero__stage" data-reveal>
-          <figure class="hero__portrait">
-            <img
-              src="./v4/assets/portrait/alina-portrait-rgba-final.png?v=8.0.1"
-              alt="Алина Васильева в чёрном образе сидит на высоком стуле в красных туфлях"
-              width="595"
-              height="1938"
-              loading="eager"
-              fetchpriority="high"
-              decoding="async"
-            >
-          </figure>
+        <div class="hero-copy" data-reveal>
+          <h1 id="hero-name">Алина Васильева</h1>
+          <p class="hero-role">Бизнес-трекер · Коммерческий директор / CCO ·<br>Head of Business Development</p>
+          <div class="hero-lead">
+            <p>Строю коммерческие системы и точки роста: соединяю продажи, маркетинг, процессы, аналитику и команду в управляемую модель результата.</p>
+            <p>Работаю с собственниками и C-level — от диагностики и стратегии до внедрения изменений и измеримого эффекта.</p>
+          </div>
+          <a class="hero-cta" href="./index.html#contact"><span>Решить бизнес-задачу</span></a>
         </div>
+      </section>
 
-        <p class="hero__word hero__word--needs" aria-hidden="true" data-reveal>
+      <section class="hero-zone hero-center" aria-label="Портрет Алины Васильевой">
+        <div class="niche-edge niche-edge--left" aria-hidden="true"></div>
+        <div class="niche-edge niche-edge--right" aria-hidden="true"></div>
+        <figure class="hero-portrait" data-reveal>
+          <img
+            src="./v4/assets/portrait/alina-portrait-rgba-final.png?v=9.0.0"
+            alt="Алина Васильева в чёрном образе сидит на высоком стуле в красных туфлях"
+            width="595"
+            height="1938"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          >
+        </figure>
+      </section>
+
+      <section class="hero-zone hero-right">
+        <p class="hero-word hero-word--needs" aria-hidden="true" data-reveal>
           <span>Needs</span>
           <span class="accent">Space.</span>
         </p>
 
-        <div class="hero__copy" data-reveal>
-          <h1 id="hero-name">Алина Васильева</h1>
-          <p class="hero__role">Бизнес-трекер · Коммерческий директор / CCO ·<br>Head of Business Development</p>
-          <p class="hero__lead">
-            <span>Строю коммерческие системы и точки роста: соединяю продажи, маркетинг, процессы, аналитику и команду в управляемую модель результата.</span>
-            <span>Работаю с собственниками и C-level — от диагностики и стратегии до внедрения изменений и измеримого эффекта.</span>
-          </p>
-          <a class="text-link" href="#contact"><span>Решить бизнес-задачу</span></a>
-        </div>
-
-        <a class="hero__telegram" href="https://t.me/AlinaVasileva" target="_blank" rel="noopener noreferrer" aria-label="Открыть Telegram Алины Васильевой" data-reveal>
+        <a class="hero-telegram" href="https://t.me/AlinaVasileva" target="_blank" rel="noopener noreferrer" aria-label="Открыть Telegram Алины Васильевой" data-reveal>
           <small>Telegram</small>
           <strong>@AlinaVasileva</strong>
         </a>
-      </div>
+      </section>
     </main>
 
     <section class="hero-facts" aria-label="Ключевые факты">
@@ -79,13 +83,13 @@
         <strong>600+</strong>
         <span>коммерческих проектов</span>
       </div>
-      <div class="hero-fact" data-reveal>
+      <div class="hero-fact hero-fact--wide" data-reveal>
         <strong>Более 500 млн</strong>
         <span>помогла заработать компаниям</span>
       </div>
     </section>
   </div>
 
-  <script src="./hero-preview.js?v=8.0.1"></script>
+  <script src="./hero-preview.js?v=9.0.0"></script>
 </body>
 </html>
