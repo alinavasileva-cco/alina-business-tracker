@@ -36,8 +36,7 @@
 
     nav?.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
 
-    const navLinks = Array.from(nav?.querySelectorAll('a') || []);
-    navLinks.forEach((link) => {
+    Array.from(nav?.querySelectorAll('a') || []).forEach((link) => {
       const text = link.textContent?.trim().toLowerCase();
       if (text === 'экспертиза' || text === 'подход') link.remove();
       if (text === 'обо мне') link.setAttribute('href', '#hero');
@@ -49,9 +48,7 @@
     const heroCta = document.querySelector('.hero__copy .text-link');
     const directions = document.querySelector('.hero__directions');
 
-    if (heroRole) {
-      heroRole.innerHTML = 'Бизнес-трекер · Коммерческий директор / CCO ·<br>Head of Business Development';
-    }
+    if (heroRole) heroRole.innerHTML = 'Бизнес-трекер · Коммерческий директор / CCO ·<br>Head of Business Development';
 
     if (heroLead) {
       heroLead.innerHTML = `
@@ -94,7 +91,6 @@
     document.querySelector('.profile')?.remove();
     document.querySelector('.expertise')?.remove();
     document.querySelector('.approach')?.remove();
-
     document.querySelectorAll('.services .text-link').forEach((link) => link.remove());
 
     const clients = document.querySelector('.clients');
@@ -105,9 +101,7 @@
     clientsIntro?.remove();
 
     if (clientsGrid) {
-      const names = Array.from(clientsGrid.querySelectorAll('li'))
-        .map((item) => item.textContent?.trim())
-        .filter(Boolean);
+      const names = Array.from(clientsGrid.querySelectorAll('li')).map((item) => item.textContent?.trim()).filter(Boolean);
       const makeGroup = (hidden = false) => `
         <div class="clients-marquee__group"${hidden ? ' aria-hidden="true"' : ''}>
           ${names.map((name) => `<span class="clients-marquee__item">${name}</span>`).join('')}
@@ -135,45 +129,78 @@
       casesHead.insertAdjacentElement('afterend', index);
     }
 
-    const casesFooterText = document.querySelector('.cases-section__footer > p');
-    casesFooterText?.remove();
+    document.querySelector('.cases-section__footer > p')?.remove();
 
     const imageSources = [
-      {
-        source: './v4/assets/cases/case-01/case-01-scaling-final.webp?v=6.1.0',
-        fallback: './v4/assets/cases/case-01/case-01-scaling-final.png?v=6.1.0',
-      },
-      {
-        source: './assets/cases/case-02-profit.webp?v=6.1.0',
-        fallback: './assets/cases/case-02-profit.jpg?v=6.1.0',
-      },
-      {
-        source: './assets/cases/case-03-ecommerce.webp?v=6.1.0',
-        fallback: './assets/cases/case-03-ecommerce.jpg?v=6.1.0',
-      },
-      {
-        source: './assets/cases/case-04-product.webp?v=6.1.0',
-        fallback: './assets/cases/case-04-product.jpg?v=6.1.0',
-      },
+      { source: './v4/assets/cases/case-01/case-01-scaling-final.webp?v=6.1.0', fallback: './v4/assets/cases/case-01/case-01-scaling-final.png?v=6.1.0' },
+      { source: './assets/cases/case-02-profit.webp?v=6.1.0', fallback: './assets/cases/case-02-profit.jpg?v=6.1.0' },
+      { source: './assets/cases/case-03-ecommerce.webp?v=6.1.0', fallback: './assets/cases/case-03-ecommerce.jpg?v=6.1.0' },
+      { source: './assets/cases/case-04-product.webp?v=6.1.0', fallback: './assets/cases/case-04-product.jpg?v=6.1.0' },
     ];
 
     caseSlides.forEach((slide, index) => {
-      const picture = slide.querySelector('picture');
-      const source = picture?.querySelector('source');
-      const image = picture?.querySelector('img');
+      const source = slide.querySelector('picture source');
+      const image = slide.querySelector('picture img');
       if (source && imageSources[index]) source.setAttribute('srcset', imageSources[index].source);
       if (image && imageSources[index]) image.setAttribute('src', imageSources[index].fallback);
     });
 
-    const contactTitle = document.querySelector('#contact-title');
-    if (contactTitle) contactTitle.textContent = 'Контакты';
-    document.querySelectorAll('.contact__links a').forEach((link) => {
-      Array.from(link.childNodes).forEach((node) => {
-        if (node.nodeType === Node.TEXT_NODE && node.textContent?.includes('→')) node.textContent = node.textContent.replaceAll('→', '');
-      });
-    });
-    const topLink = document.querySelector('.contact__bottom a');
-    if (topLink) topLink.textContent = 'Наверх';
+    const experience = document.querySelector('.experience');
+    if (experience) {
+      const rows = Array.from(experience.querySelectorAll('.experience__track article')).map((article) => ({
+        year: article.querySelector('time')?.textContent?.trim() || '',
+        role: article.querySelector('h3')?.textContent?.trim() || '',
+        company: article.querySelector('.experience__company')?.textContent?.trim() || '',
+        scope: Array.from(article.querySelectorAll('p')).find((item) => !item.classList.contains('experience__company'))?.textContent?.trim() || '',
+      }));
+      experience.innerHTML = `
+        <div class="section-shell">
+          <header class="section-heading" data-reveal>
+            <div><p class="section-kicker">Опыт</p><h2 id="experience-title">Управленческий трек</h2></div>
+          </header>
+          <ul class="experience__track">
+            ${rows.map((row) => `<li data-reveal><time class="experience__year">${row.year}</time><h3 class="experience__role">${row.role}</h3><p class="experience__company">${row.company}</p><p class="experience__scope">${row.scope}</p></li>`).join('')}
+          </ul>
+        </div>`;
+    }
+
+    const education = document.querySelector('.education');
+    if (education) {
+      const degree = education.querySelector('.education__degree')?.textContent?.replace(/\s+/g, ' ').replace('Высшее образование', '').trim() || 'Журналист — СПбГУП';
+      const rows = Array.from(education.querySelectorAll('.education__list article')).map((article) => ({
+        year: article.querySelector('time')?.textContent?.trim() || '',
+        title: article.querySelector('h3')?.textContent?.trim() || '',
+        source: article.querySelector('p')?.textContent?.trim() || '',
+      }));
+      education.innerHTML = `
+        <div class="section-shell">
+          <header class="section-heading" data-reveal>
+            <div><p class="section-kicker">Образование</p><h2 id="education-title">Образование</h2></div>
+          </header>
+          <div class="education__degree" data-reveal><p>Высшее образование</p><h3>${degree}</h3></div>
+          <div class="education__timeline">
+            ${rows.map((row) => `<article data-reveal><time>${row.year}</time><div><h3>${row.title}</h3><p>${row.source}</p></div></article>`).join('')}
+          </div>
+        </div>`;
+    }
+
+    const contact = document.querySelector('.contact');
+    if (contact) {
+      contact.innerHTML = `
+        <div class="section-shell">
+          <p class="section-kicker" data-reveal>Контакты</p>
+          <div class="contact__main" data-reveal>
+            <h2 id="contact-title">Контакты</h2>
+            <p>Коммерческая стратегия, развитие направления, P&amp;L, процессы и управленческие системы.</p>
+          </div>
+          <address class="contact__links" data-reveal>
+            <a href="tel:+79818885389" aria-label="Позвонить Алине Васильевой"><span>Телефон</span>+7 981 888 53 89</a>
+            <a href="mailto:alinavasileva.jour@mail.ru" aria-label="Написать Алине Васильевой по электронной почте"><span>Email</span>alinavasileva.jour@mail.ru</a>
+            <a href="https://t.me/AlinaVasileva" target="_blank" rel="noopener noreferrer" aria-label="Открыть Telegram Алины Васильевой"><span>Telegram</span>@AlinaVasileva</a>
+          </address>
+          <div class="contact__bottom"><p>© 2026 Алина Васильева</p><a href="#hero">Наверх</a></div>
+        </div>`;
+    }
 
     const revealItems = Array.from(document.querySelectorAll('[data-reveal]'));
     if (reduceMotion.matches || !('IntersectionObserver' in window)) {
@@ -206,11 +233,8 @@
 
     const moveToCase = (index, behavior = 'smooth') => {
       setActive(index);
-      if (window.innerWidth <= 1023) {
-        caseSlides[activeIndex]?.scrollIntoView({ behavior, block: 'start' });
-      } else if (track) {
-        track.scrollTo({ left: activeIndex * track.clientWidth, behavior });
-      }
+      if (window.innerWidth <= 1023) caseSlides[activeIndex]?.scrollIntoView({ behavior, block: 'start' });
+      else if (track) track.scrollTo({ left: activeIndex * track.clientWidth, behavior });
     };
 
     prev?.addEventListener('click', () => moveToCase(activeIndex - 1));
