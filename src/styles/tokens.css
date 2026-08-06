@@ -1,0 +1,33 @@
+@font-face {
+  font-family: 'Manrope';
+  src: url('../assets/fonts/manrope-cyrillic-wght-normal.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 300 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Serif Display';
+  src: url('../assets/fonts/noto-serif-display-cyrillic-wght-normal.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+}
+
+:root {
+  --paper: #eee8de;
+  --paper-deep: #e4dbcf;
+  --stone: #d8cec0;
+  --stone-dark: #bcb0a0;
+  --ink: #191714;
+  --muted: #716a61;
+  --line: rgb(25 23 20 / 18%);
+  --line-strong: rgb(25 23 20 / 34%);
+  --accent: #c63a2b;
+  --accent-dark: #9f2e23;
+  --header-height: 70px;
+  --shell: min(1760px, calc(100vw - 80px));
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --serif: 'Noto Serif Display', 'Times New Roman', serif;
+  --sans: 'Manrope', Arial, sans-serif;
+}
