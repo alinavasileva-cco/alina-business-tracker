@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="wallL" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e9ded4"/><stop offset="0.75" stop-color="#e1d4c8"/><stop offset="1" stop-color="#d5c5b8"/></linearGradient>
+    <linearGradient id="wallR" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="#e8ddd3"/><stop offset="0.75" stop-color="#e0d3c7"/><stop offset="1" stop-color="#d2c2b4"/></linearGradient>
+    <linearGradient id="revealL" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#c2b0a1"/><stop offset="0.45" stop-color="#eee3d9"/><stop offset="0.73" stop-color="#decfc2"/><stop offset="1" stop-color="#a99788"/></linearGradient>
+    <linearGradient id="revealR" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#a59485"/><stop offset="0.30" stop-color="#c8b8aa"/><stop offset="0.63" stop-color="#eee3d9"/><stop offset="1" stop-color="#baa898"/></linearGradient>
+    <linearGradient id="niche" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b8aea2"/><stop offset="0.22" stop-color="#c2b8ae"/><stop offset="0.54" stop-color="#c7bfb5"/><stop offset="0.81" stop-color="#bbb3aa"/><stop offset="1" stop-color="#aaa299"/></linearGradient>
+    <radialGradient id="light" cx="50%" cy="39%" rx="53%" ry="43%"><stop offset="0" stop-color="#fffaf4" stop-opacity="0.17"/><stop offset="0.45" stop-color="#fffaf4" stop-opacity="0.055"/><stop offset="1" stop-color="#fffaf4" stop-opacity="0"/></radialGradient>
+    <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bbb3aa"/><stop offset="1" stop-color="#aaa299"/></linearGradient>
+    <linearGradient id="castL" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3e3026" stop-opacity="0.18"/><stop offset="1" stop-color="#3e3026" stop-opacity="0"/></linearGradient>
+    <linearGradient id="castR" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="#3e3026" stop-opacity="0.13"/><stop offset="1" stop-color="#3e3026" stop-opacity="0"/></linearGradient>
+    <filter id="b32" x="-40%" y="-20%" width="180%" height="140%"><feGaussianBlur stdDeviation="28"/></filter>
+    <filter id="b52" x="-50%" y="-30%" width="200%" height="160%"><feGaussianBlur stdDeviation="44"/></filter>
+    <filter id="grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.76" numOctaves="2" seed="13" result="n"/><feColorMatrix in="n" type="matrix" values="0.9 0 0 0 .05 0 .82 0 0 .045 0 0 .75 0 .04 0 0 0 .03 0" result="g"/><feBlend in="SourceGraphic" in2="g" mode="multiply"/></filter>
+  </defs>
+  <g filter="url(#grain)">
+    <rect width="1080" height="1920" fill="#e4d7cc"/>
+    <rect x="0" y="0" width="156" height="1685" fill="url(#wallL)"/>
+    <rect x="156" y="0" width="24" height="1685" fill="url(#revealL)"/>
+    <rect x="180" y="0" width="720" height="1685" fill="url(#niche)"/>
+    <rect x="180" y="0" width="720" height="1685" fill="url(#light)"/>
+    <rect x="900" y="0" width="24" height="1685" fill="url(#revealR)"/>
+    <rect x="924" y="0" width="156" height="1685" fill="url(#wallR)"/>
+    <rect x="160" y="0" width="110" height="1685" fill="url(#castL)" filter="url(#b32)"/>
+    <rect x="810" y="0" width="110" height="1685" fill="url(#castR)" filter="url(#b32)"/>
+    <rect x="180" y="0" width="720" height="215" fill="#403126" fill-opacity="0.055" filter="url(#b32)"/>
+    <rect x="0" y="1685" width="1080" height="235" fill="url(#floor)"/>
+    <ellipse cx="192" cy="1725" rx="92" ry="72" fill="#44352b" fill-opacity="0.095" filter="url(#b52)"/>
+    <ellipse cx="894" cy="1728" rx="88" ry="70" fill="#44352b" fill-opacity="0.065" filter="url(#b52)"/>
+  </g>
+</svg>
