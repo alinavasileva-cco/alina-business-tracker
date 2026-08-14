@@ -1,14 +1,14 @@
-name: Build hero assets
+name: Build hero inline preview
 
 on:
   push:
     branches:
       - fix/surgical-restore
     paths:
-      - 'hero-assets/**'
       - '.github/workflows/build-hero-assets.yml'
-      - 'assets/final/hero-final.webp'
-      - 'v4/assets/portrait/alina-portrait-rgba-final.png'
+      - 'assets/hero/approved-desktop.webp'
+      - 'assets/hero/approved-tablet.webp'
+      - 'assets/hero/approved-mobile.webp'
   workflow_dispatch:
 
 permissions:
@@ -24,32 +24,35 @@ jobs:
           ref: fix/surgical-restore
           fetch-depth: 0
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
+      - name: Build self-contained responsive preview
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import base64
 
-      - name: Install image dependencies
-        run: python -m pip install --disable-pip-version-check pillow numpy scipy opencv-python-headless
+          root = Path('.')
+          assets = root / 'assets' / 'hero'
+          images = {
+              'desktop': base64.b64encode((assets / 'approved-desktop.webp').read_bytes()).decode('ascii'),
+              'tablet': base64.b64encode((assets / 'approved-tablet.webp').read_bytes()).decode('ascii'),
+              'mobile': base64.b64encode((assets / 'approved-mobile.webp').read_bytes()).decode('ascii'),
+          }
 
-      - name: Generate clean plates and portrait
-        run: python hero-assets/build_hero_assets.py
+          html = f'''<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#e8ddd1"><title>Алина Васильева — Hero Final</title><style>*{{box-sizing:border-box}}html,body{{margin:0;padding:0;background:#e8ddd1}}body{{overflow-x:hidden}}main,img{{display:block;width:100%;margin:0}}img{{width:100%;height:auto}}@media(max-width:767px){{.desktop,.tablet{{display:none!important}}.mobile{{display:block!important}}}}@media(min-width:768px) and (max-width:1199px){{.desktop,.mobile{{display:none!important}}.tablet{{display:block!important}}}}@media(min-width:1200px){{.tablet,.mobile{{display:none!important}}.desktop{{display:block!important}}}}</style></head><body><main><img class="desktop" src="data:image/webp;base64,{images['desktop']}" alt="Алина Васильева — desktop"><img class="tablet" src="data:image/webp;base64,{images['tablet']}" alt="Алина Васильева — tablet"><img class="mobile" src="data:image/webp;base64,{images['mobile']}" alt="Алина Васильева — mobile"></main></body></html>'''
+          Path('hero-final-inline.html').write_text(html, encoding='utf-8')
+          print('hero-final-inline.html bytes:', Path('hero-final-inline.html').stat().st_size)
+          PY
 
-      - name: Commit generated assets
+      - name: Commit inline preview
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/hero/hero-architecture-reference-clean.png \
-                  assets/hero/hero-architecture-desktop.webp \
-                  assets/hero/hero-architecture-tablet.webp \
-                  assets/hero/hero-architecture-mobile.webp \
-                  assets/hero/alina-portrait-clean.png \
-                  assets/hero/alina-portrait-clean.webp \
-                  assets/hero/asset-report.txt
+          git add hero-final-inline.html
           if git diff --cached --quiet; then
-            echo "Generated assets are unchanged."
+            echo "Inline preview unchanged."
           else
-            git commit -m "build(hero): regenerate approved-reference assets"
+            git commit -m "build(hero): add self-contained responsive preview"
             git push origin HEAD:fix/surgical-restore
           fi
