@@ -1,4 +1,4 @@
-name: Build hero inline preview
+name: Build hero verified preview
 
 on:
   push:
@@ -24,35 +24,84 @@ jobs:
           ref: fix/surgical-restore
           fetch-depth: 0
 
-      - name: Build self-contained responsive preview
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Pillow
+        run: python -m pip install --disable-pip-version-check pillow
+
+      - name: Verify source images and convert to PNG
         shell: bash
         run: |
           python - <<'PY'
           from pathlib import Path
-          import base64
+          from PIL import Image
 
-          root = Path('.')
-          assets = root / 'assets' / 'hero'
-          images = {
-              'desktop': base64.b64encode((assets / 'approved-desktop.webp').read_bytes()).decode('ascii'),
-              'tablet': base64.b64encode((assets / 'approved-tablet.webp').read_bytes()).decode('ascii'),
-              'mobile': base64.b64encode((assets / 'approved-mobile.webp').read_bytes()).decode('ascii'),
+          assets = Path('assets/hero')
+          specs = {
+              'desktop': (1672, 941),
+              'tablet': (1086, 1448),
+              'mobile': (853, 1844),
           }
 
-          html = f'''<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#e8ddd1"><title>Алина Васильева — Hero Final</title><style>*{{box-sizing:border-box}}html,body{{margin:0;padding:0;background:#e8ddd1}}body{{overflow-x:hidden}}main,img{{display:block;width:100%;margin:0}}img{{width:100%;height:auto}}@media(max-width:767px){{.desktop,.tablet{{display:none!important}}.mobile{{display:block!important}}}}@media(min-width:768px) and (max-width:1199px){{.desktop,.mobile{{display:none!important}}.tablet{{display:block!important}}}}@media(min-width:1200px){{.tablet,.mobile{{display:none!important}}.desktop{{display:block!important}}}}</style></head><body><main><img class="desktop" src="data:image/webp;base64,{images['desktop']}" alt="Алина Васильева — desktop"><img class="tablet" src="data:image/webp;base64,{images['tablet']}" alt="Алина Васильева — tablet"><img class="mobile" src="data:image/webp;base64,{images['mobile']}" alt="Алина Васильева — mobile"></main></body></html>'''
-          Path('hero-final-inline.html').write_text(html, encoding='utf-8')
-          print('hero-final-inline.html bytes:', Path('hero-final-inline.html').stat().st_size)
+          for name, expected in specs.items():
+              src = assets / f'approved-{name}.webp'
+              with Image.open(src) as im:
+                  im.load()
+                  print(name, 'source', im.size, im.mode, src.stat().st_size)
+                  if im.size != expected:
+                      raise RuntimeError(f'{name}: expected {expected}, got {im.size}')
+                  out = assets / f'approved-{name}.png'
+                  im.convert('RGB').save(out, 'PNG', optimize=True)
+                  with Image.open(out) as check:
+                      check.load()
+                      if check.size != expected:
+                          raise RuntimeError(f'{name} PNG verify failed')
+                  print(name, 'png', out.stat().st_size)
           PY
 
-      - name: Commit inline preview
+      - name: Build responsive HTML using verified PNG files
+        shell: bash
+        run: |
+          cat > hero-final-live.html <<'HTML'
+          <!doctype html>
+          <html lang="ru">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+            <meta name="theme-color" content="#e8ddd1">
+            <title>Алина Васильева</title>
+            <style>
+              *{box-sizing:border-box}
+              html,body{margin:0;padding:0;background:#e8ddd1}
+              body{overflow-x:hidden}
+              main,picture,img{display:block;width:100%;margin:0}
+              img{width:100%;height:auto}
+            </style>
+          </head>
+          <body>
+            <main>
+              <picture>
+                <source media="(max-width:767px)" srcset="./assets/hero/approved-mobile.png">
+                <source media="(max-width:1199px)" srcset="./assets/hero/approved-tablet.png">
+                <img src="./assets/hero/approved-desktop.png" alt="Алина Васильева">
+              </picture>
+            </main>
+          </body>
+          </html>
+          HTML
+
+      - name: Commit verified preview
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add hero-final-inline.html
+          git add assets/hero/approved-desktop.png assets/hero/approved-tablet.png assets/hero/approved-mobile.png hero-final-live.html
           if git diff --cached --quiet; then
-            echo "Inline preview unchanged."
+            echo "Verified preview unchanged."
           else
-            git commit -m "build(hero): add self-contained responsive preview"
+            git commit -m "build(hero): publish verified PNG responsive preview"
             git push origin HEAD:fix/surgical-restore
           fi
