@@ -1,0 +1,69 @@
+name: Render approved hero raster assets
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - tools/render_hero_backgrounds.py
+      - .github/workflows/render-approved-hero-assets.yml
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install renderer dependencies
+        run: python -m pip install --disable-pip-version-check pillow numpy
+
+      - name: Render HQ raster backgrounds
+        run: python tools/render_hero_backgrounds.py
+
+      - name: Validate output files
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          expected = {
+              'hero-bg-ultrawide-5120x2160.jpg': (5120, 2160),
+              'hero-bg-desktop-3840x2160.jpg': (3840, 2160),
+              'hero-bg-laptop-3200x2000.jpg': (3200, 2000),
+              'hero-bg-tablet-landscape-2732x2048.jpg': (2732, 2048),
+              'hero-bg-tablet-portrait-2048x2732.jpg': (2048, 2732),
+              'hero-bg-mobile-1440x2560.jpg': (1440, 2560),
+              'hero-bg-mobile-tall-1440x3120.jpg': (1440, 3120),
+          }
+          root = Path('approved/assets')
+          for name, size in expected.items():
+              path = root / name
+              if not path.exists():
+                  raise SystemExit(f'Missing {path}')
+              with Image.open(path) as im:
+                  if im.size != size or im.mode != 'RGB':
+                      raise SystemExit(f'Invalid {name}: {im.size} {im.mode}')
+                  im.verify()
+              print('OK', name, size)
+          PY
+
+      - name: Commit raster assets
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add approved/assets/hero-bg-*.jpg
+          if git diff --cached --quiet; then
+            echo 'No asset changes to commit.'
+            exit 0
+          fi
+          git commit -m 'Render HQ approved hero backgrounds'
+          git push
