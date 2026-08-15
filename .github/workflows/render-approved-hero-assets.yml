@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - tools/render_hero_backgrounds.py
+      - tools/clean_hero_portrait.py
       - .github/workflows/render-approved-hero-assets.yml
 
 permissions:
@@ -29,6 +30,9 @@ jobs:
 
       - name: Render HQ raster backgrounds
         run: python tools/render_hero_backgrounds.py
+
+      - name: Clean portrait edges
+        run: python tools/clean_hero_portrait.py
 
       - name: Validate output files
         run: |
@@ -54,16 +58,25 @@ jobs:
                       raise SystemExit(f'Invalid {name}: {im.size} {im.mode}')
                   im.verify()
               print('OK', name, size)
+
+          portrait = root / 'alina-portrait-clean.png'
+          if not portrait.exists():
+              raise SystemExit(f'Missing {portrait}')
+          with Image.open(portrait) as im:
+              if im.mode != 'RGBA' or im.size != (484, 1527):
+                  raise SystemExit(f'Invalid portrait: {im.size} {im.mode}')
+              im.verify()
+          print('OK', portrait)
           PY
 
       - name: Commit raster assets
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add approved/assets/hero-bg-*.jpg
+          git add approved/assets/hero-bg-*.jpg approved/assets/alina-portrait-clean.png
           if git diff --cached --quiet; then
             echo 'No asset changes to commit.'
             exit 0
           fi
-          git commit -m 'Render HQ approved hero backgrounds'
+          git commit -m 'Render HQ approved hero backgrounds and cleaned portrait'
           git push
