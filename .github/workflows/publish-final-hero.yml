@@ -1,0 +1,56 @@
+name: Publish final premium hero
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.tmp/final-hero/approved.html'
+      - 'tools/publish_final_hero.py'
+      - '.github/workflows/publish-final-hero.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-final-premium-hero
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact triggering commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install image dependencies
+        run: python -m pip install --disable-pip-version-check pillow numpy scipy
+
+      - name: Build responsive raster family, clean portrait, validate HTML
+        run: python tools/publish_final_hero.py
+
+      - name: Commit final public hero
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          rm -f .tmp/final-hero/approved.html
+          git add -A .tmp/final-hero/approved.html \
+            v2/approved.html \
+            v2/assets/hero-bg-mobile-final-1440x2560.webp \
+            v2/assets/hero-bg-tablet-portrait-final-2048x2732.webp \
+            v2/assets/alina-portrait-clean-v2.png
+          if git diff --cached --quiet; then
+            echo 'No generated changes to commit.'
+            exit 0
+          fi
+          git commit -m 'Publish final premium responsive hero'
+          git pull --rebase origin main
+          git push origin HEAD:main
