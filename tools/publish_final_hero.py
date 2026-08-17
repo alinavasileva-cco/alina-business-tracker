@@ -12,6 +12,7 @@ HTML_IN = TMP / 'approved.html'
 HTML_OUT = V2 / 'approved.html'
 PORTRAIT_IN = ASSETS / 'alina-portrait-clean.png'
 PORTRAIT_OUT = ASSETS / 'alina-portrait-final-nohalo.png'
+PORTRAIT_SIZE = (1190, 3876)
 
 PLATES = {
     'hero-bg-ultrawide-final-5120x2160.webp': ('hero-bg-ultrawide-5120x2160.jpg', (5120, 2160)),
@@ -25,6 +26,8 @@ PLATES = {
 
 
 def build_responsive_plates() -> None:
+    # Keep the original high-resolution JPG clean plates as the HTML delivery source.
+    # Also retain validated WebP derivatives for later optimisation without changing composition.
     for out_name, (src_name, expected_size) in PLATES.items():
         src_path = ASSETS / src_name
         if not src_path.exists():
@@ -33,7 +36,7 @@ def build_responsive_plates() -> None:
             src = src.convert('RGB')
             if src.size != expected_size:
                 raise SystemExit(f'Unexpected source size {src_path}: {src.size}, expected {expected_size}')
-            src.save(ASSETS / out_name, 'WEBP', quality=94, method=6)
+            src.save(ASSETS / out_name, 'WEBP', quality=96, method=6)
 
 
 def clean_portrait() -> None:
@@ -42,27 +45,34 @@ def clean_portrait() -> None:
     rgb = arr[:, :, :3].astype(np.float32)
     alpha = arr[:, :, 3].astype(np.float32) / 255.0
 
-    # Replace RGB contamination only in semi-transparent edge pixels with the
-    # nearest nearly-opaque portrait colour. Opaque face/body pixels are untouched.
-    opaque = alpha > 0.985
-    _, inds = ndi.distance_transform_edt(~opaque, return_indices=True)
-    nearest_rgb = rgb[inds[0], inds[1]]
-    edge = (alpha > 0) & (alpha < 0.999)
-    weight = np.clip((0.999 - alpha) / 0.38, 0, 1)[..., None]
-    rgb[edge] = (1 - weight[edge]) * rgb[edge] + weight[edge] * nearest_rgb[edge]
+    # Nearest opaque portrait colour removes pale RGB contamination without
+    # touching the opaque face/body/garment pixels.
+    solid = alpha > 0.97
+    _, inds = ndi.distance_transform_edt(~solid, return_indices=True)
+    nearest = rgb[inds[0], inds[1]]
+    edge = (alpha > 0) & (alpha < 0.9995)
+    edge_w = np.clip((0.9995 - alpha) / 0.30, 0, 1)[..., None]
+    rgb[edge] = rgb[edge] * (1 - edge_w[edge]) + nearest[edge] * edge_w[edge]
 
-    # Remove only the outermost pale fringe; preserve hair and all opaque pixels.
-    alpha_img = Image.fromarray((alpha * 255).astype(np.uint8), 'L')
-    eroded = np.array(alpha_img.filter(ImageFilter.MinFilter(3))).astype(np.float32) / 255.0
+    # Remove the outer 1px light matte, while retaining fine hair opacity.
+    a8 = Image.fromarray(np.clip(alpha * 255, 0, 255).astype(np.uint8), 'L')
+    eroded = np.array(a8.filter(ImageFilter.MinFilter(3))).astype(np.float32) / 255.0
     alpha2 = alpha.copy()
-    outer = (alpha > 0) & (alpha < 0.58)
-    alpha2[outer] = 0.45 * alpha[outer] + 0.55 * eroded[outer]
-    alpha2[alpha2 < 0.015] = 0
+    semi = (alpha > 0) & (alpha < 0.92)
+    alpha2[semi] = np.minimum(alpha2[semi], 0.25 * alpha[semi] + 0.75 * eroded[semi])
+    alpha2[alpha2 < 0.022] = 0
 
-    out = np.dstack([
-        np.clip(rgb, 0, 255).astype(np.uint8),
-        np.clip(alpha2 * 255, 0, 255).astype(np.uint8),
-    ])
+    # Premultiplied-alpha upscale avoids reintroducing a white fringe during resampling.
+    premul = rgb * alpha2[..., None]
+    rgba_pm = np.dstack([np.clip(premul, 0, 255), np.clip(alpha2 * 255, 0, 255)]).astype(np.uint8)
+    up = Image.fromarray(rgba_pm, 'RGBA').resize(PORTRAIT_SIZE, Image.Resampling.LANCZOS)
+    up_arr = np.array(up).astype(np.float32)
+    a = up_arr[:, :, 3:4] / 255.0
+    pm = up_arr[:, :, :3]
+    out_rgb = np.zeros_like(pm)
+    mask = a[:, :, 0] > 0.002
+    out_rgb[mask] = np.clip(pm[mask] / a[mask], 0, 255)
+    out = np.dstack([out_rgb.astype(np.uint8), up_arr[:, :, 3].astype(np.uint8)])
     Image.fromarray(out, 'RGBA').save(PORTRAIT_OUT, 'PNG', optimize=True)
 
 
@@ -73,8 +83,14 @@ def publish_html() -> None:
 
 
 def validate() -> None:
-    for name, (_, expected_size) in PLATES.items():
-        path = ASSETS / name
+    # Validate original scene masters and derived WebPs.
+    for out_name, (src_name, expected_size) in PLATES.items():
+        src_path = ASSETS / src_name
+        with Image.open(src_path) as src:
+            if src.size != expected_size or src.convert('RGB').mode != 'RGB':
+                raise SystemExit(f'Invalid source plate {src_path}: {src.size} {src.mode}')
+            src.verify()
+        path = ASSETS / out_name
         data = path.read_bytes()
         if data[:4] != b'RIFF' or data[8:12] != b'WEBP':
             raise SystemExit(f'Invalid WEBP signature: {path}')
@@ -82,27 +98,30 @@ def validate() -> None:
             if im.size != expected_size or im.mode != 'RGB':
                 raise SystemExit(f'Invalid {path}: {im.size} {im.mode}')
             im.verify()
-        print('OK', name, expected_size, path.stat().st_size)
+        print('OK plate', src_name, expected_size)
 
     data = PORTRAIT_OUT.read_bytes()
     if data[:8] != b'\x89PNG\r\n\x1a\n':
         raise SystemExit('Invalid portrait PNG signature')
     with Image.open(PORTRAIT_OUT) as im:
-        if im.size != (595, 1938) or im.mode != 'RGBA':
+        if im.size != PORTRAIT_SIZE or im.mode != 'RGBA':
             raise SystemExit(f'Invalid portrait: {im.size} {im.mode}')
+        extrema = im.getchannel('A').getextrema()
+        if extrema != (0, 255):
+            raise SystemExit(f'Invalid portrait alpha extrema: {extrema}')
         im.verify()
-    print('OK portrait', PORTRAIT_OUT, PORTRAIT_OUT.stat().st_size)
+    print('OK portrait', PORTRAIT_OUT, PORTRAIT_SIZE)
 
     text = HTML_OUT.read_text(encoding='utf-8')
     required = [
         'GROWTH', 'NEEDS', 'SPACE.', 'АЛИНА ВАСИЛЬЕВА', '12 ЛЕТ', '600+',
         'БОЛЕЕ 500 МЛН', '@AlinaVasileva', 'alina-portrait-final-nohalo.png',
-        'hero-bg-mobile-tall-final-1440x3120.webp', '<picture class="hero-bg"',
+        'hero-bg-mobile-tall-1440x3120.jpg', 'hero-bg-desktop-3840x2160.jpg',
     ]
     for token in required:
         if token not in text:
             raise SystemExit(f'Missing required HTML token: {token}')
-    forbidden = ['object-fit: fill', 'data:image/', 'drop-shadow(', 'filter:drop-shadow']
+    forbidden = ['object-fit: fill', 'data:image/', 'drop-shadow(', 'filter:drop-shadow', 'nav-dot']
     for token in forbidden:
         if token in text:
             raise SystemExit(f'Forbidden HTML/CSS token present: {token}')
