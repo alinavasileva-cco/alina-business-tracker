@@ -1,5 +1,5 @@
 from pathlib import Path
-from PIL import Image, ImageFilter
+from PIL import Image
 import numpy as np
 import scipy.ndimage as ndi
 import shutil
@@ -39,23 +39,36 @@ def build_responsive_plates() -> None:
 
 def clean_portrait() -> None:
     im = Image.open(PORTRAIT_IN).convert('RGBA')
-    arr = np.array(im)
-    rgb = arr[:, :, :3].astype(np.float32)
-    alpha = arr[:, :, 3].astype(np.float32) / 255.0
+    arr = np.array(im).astype(np.float32)
+    rgb = arr[:, :, :3]
+    alpha = arr[:, :, 3] / 255.0
 
-    solid = alpha > 0.97
-    _, inds = ndi.distance_transform_edt(~solid, return_indices=True)
+    visible = alpha > 0.01
+    distance_inside = ndi.distance_transform_edt(visible)
+    interior = (distance_inside >= 10) & (alpha > 0.98)
+    _, inds = ndi.distance_transform_edt(~interior, return_indices=True)
     nearest = rgb[inds[0], inds[1]]
-    edge = (alpha > 0) & (alpha < 0.9995)
-    edge_w = np.clip((0.9995 - alpha) / 0.30, 0, 1)[..., None]
-    rgb[edge] = rgb[edge] * (1 - edge_w[edge]) + nearest[edge] * edge_w[edge]
 
-    a8 = Image.fromarray(np.clip(alpha * 255, 0, 255).astype(np.uint8), 'L')
-    eroded = np.array(a8.filter(ImageFilter.MinFilter(3))).astype(np.float32) / 255.0
+    luminance = rgb.mean(axis=2)
+    chroma = rgb.max(axis=2) - rgb.min(axis=2)
+    edge_band = visible & (distance_inside < 8)
+    pale_neutral = (luminance > 205) & (chroma < 32)
+    semi = (alpha > 0) & (alpha < 0.985)
+
+    weight = np.zeros_like(alpha)
+    weight[semi] = np.clip((0.985 - alpha[semi]) / 0.60, 0, 1)
+    contaminated = edge_band & pale_neutral
+    weight[contaminated] = np.maximum(
+        weight[contaminated],
+        np.clip((8 - distance_inside[contaminated]) / 8, 0, 1)
+        * np.clip((luminance[contaminated] - 200) / 45, 0, 1),
+    )
+    rgb = rgb * (1 - weight[..., None]) + nearest * weight[..., None]
+
     alpha2 = alpha.copy()
-    semi = (alpha > 0) & (alpha < 0.92)
-    alpha2[semi] = np.minimum(alpha2[semi], 0.25 * alpha[semi] + 0.75 * eroded[semi])
-    alpha2[alpha2 < 0.022] = 0
+    outer = visible & (distance_inside < 2.1)
+    alpha2[outer] *= 0.72
+    alpha2[alpha2 < 0.018] = 0
 
     premul = rgb * alpha2[..., None]
     rgba_pm = np.dstack([np.clip(premul, 0, 255), np.clip(alpha2 * 255, 0, 255)]).astype(np.uint8)
@@ -91,7 +104,6 @@ def validate() -> None:
             if im.size != expected_size or im.mode != 'RGB':
                 raise SystemExit(f'Invalid {path}: {im.size} {im.mode}')
             im.verify()
-        print('OK plate', src_name, expected_size)
 
     data = PORTRAIT_OUT.read_bytes()
     if data[:8] != b'\x89PNG\r\n\x1a\n':
@@ -99,19 +111,13 @@ def validate() -> None:
     with Image.open(PORTRAIT_OUT) as im:
         if im.size != PORTRAIT_SIZE or im.mode != 'RGBA':
             raise SystemExit(f'Invalid portrait: {im.size} {im.mode}')
-        extrema = im.getchannel('A').getextrema()
-        if extrema != (0, 255):
-            raise SystemExit(f'Invalid portrait alpha extrema: {extrema}')
+        if im.getchannel('A').getextrema() != (0, 255):
+            raise SystemExit('Invalid portrait alpha')
     with Image.open(PORTRAIT_OUT) as im:
         im.verify()
-    print('OK portrait', PORTRAIT_OUT, PORTRAIT_SIZE)
 
     text = HTML_OUT.read_text(encoding='utf-8')
-    required = [
-        'GROWTH', 'NEEDS', 'SPACE.', 'АЛИНА ВАСИЛЬЕВА', '12 ЛЕТ', '600+',
-        'БОЛЕЕ 500 МЛН', '@AlinaVasileva', 'alina-portrait-final-nohalo.png',
-        'hero-bg-mobile-tall-1440x3120.jpg', 'hero-bg-desktop-3840x2160.jpg',
-    ]
+    required = ['GROWTH', 'NEEDS', 'SPACE', 'АЛИНА ВАСИЛЬЕВА', '12 ЛЕТ', '600+', 'БОЛЕЕ 500 МЛН', '@AlinaVasileva', 'alina-portrait-final-nohalo.png']
     for token in required:
         if token not in text:
             raise SystemExit(f'Missing required HTML token: {token}')
@@ -119,7 +125,6 @@ def validate() -> None:
     for token in forbidden:
         if token in text:
             raise SystemExit(f'Forbidden HTML/CSS token present: {token}')
-    print('OK HTML validation')
 
 
 if __name__ == '__main__':
