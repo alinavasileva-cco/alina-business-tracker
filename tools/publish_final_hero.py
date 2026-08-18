@@ -1,5 +1,5 @@
 from pathlib import Path
-from PIL import Image
+from PIL import Image, ImageFilter
 import numpy as np
 import scipy.ndimage as ndi
 import shutil
@@ -38,6 +38,12 @@ def build_responsive_plates() -> None:
 
 
 def clean_portrait() -> None:
+    """Remove white/grey matte only at the alpha contour, then upscale premultiplied.
+
+    The subject is not regenerated or geometrically altered. Edge pixels are colour-pulled
+    from the nearest opaque interior and the outermost alpha is contracted by roughly one
+    source pixel to eliminate the visible white halo on warm/dark backgrounds.
+    """
     im = Image.open(PORTRAIT_IN).convert('RGBA')
     arr = np.array(im).astype(np.float32)
     rgb = arr[:, :, :3]
@@ -45,29 +51,30 @@ def clean_portrait() -> None:
 
     visible = alpha > 0.01
     distance_inside = ndi.distance_transform_edt(visible)
-    interior = (distance_inside >= 10) & (alpha > 0.98)
+    interior = (distance_inside >= 8) & (alpha > 0.985)
+    if not interior.any():
+        interior = (distance_inside >= 5) & (alpha > 0.95)
     _, inds = ndi.distance_transform_edt(~interior, return_indices=True)
     nearest = rgb[inds[0], inds[1]]
 
     luminance = rgb.mean(axis=2)
     chroma = rgb.max(axis=2) - rgb.min(axis=2)
-    edge_band = visible & (distance_inside < 8)
-    pale_neutral = (luminance > 205) & (chroma < 32)
-    semi = (alpha > 0) & (alpha < 0.985)
+    edge_strength = np.clip((6.0 - distance_inside) / 6.0, 0, 1)
+    semi_strength = np.clip((0.995 - alpha) / 0.38, 0, 1)
+    weight = np.maximum(edge_strength * 0.94, semi_strength * 0.90) * visible
 
-    weight = np.zeros_like(alpha)
-    weight[semi] = np.clip((0.985 - alpha[semi]) / 0.60, 0, 1)
-    contaminated = edge_band & pale_neutral
-    weight[contaminated] = np.maximum(
-        weight[contaminated],
-        np.clip((8 - distance_inside[contaminated]) / 8, 0, 1)
-        * np.clip((luminance[contaminated] - 200) / 45, 0, 1),
+    pale_neutral = (luminance > 170) & (chroma < 55) & (distance_inside < 9)
+    weight[pale_neutral] = np.maximum(
+        weight[pale_neutral],
+        np.clip((9 - distance_inside[pale_neutral]) / 9, 0, 1),
     )
     rgb = rgb * (1 - weight[..., None]) + nearest * weight[..., None]
 
-    alpha2 = alpha.copy()
-    outer = visible & (distance_inside < 2.1)
-    alpha2[outer] *= 0.72
+    alpha_img = Image.fromarray(np.clip(alpha * 255, 0, 255).astype(np.uint8), 'L')
+    eroded = np.array(alpha_img.filter(ImageFilter.MinFilter(3))).astype(np.float32) / 255.0
+    alpha2 = np.minimum(alpha, 0.35 * alpha + 0.65 * eroded)
+    alpha2_img = Image.fromarray(np.clip(alpha2 * 255, 0, 255).astype(np.uint8), 'L').filter(ImageFilter.GaussianBlur(0.35))
+    alpha2 = np.array(alpha2_img).astype(np.float32) / 255.0
     alpha2[alpha2 < 0.018] = 0
 
     premul = rgb * alpha2[..., None]
@@ -117,7 +124,12 @@ def validate() -> None:
         im.verify()
 
     text = HTML_OUT.read_text(encoding='utf-8')
-    required = ['GROWTH', 'NEEDS', 'SPACE', 'АЛИНА ВАСИЛЬЕВА', '12 ЛЕТ', '600+', 'БОЛЕЕ 500 МЛН', '@AlinaVasileva', 'alina-portrait-final-nohalo.png']
+    required = [
+        'GROWTH', 'NEEDS', 'SPACE', 'АЛИНА ВАСИЛЬЕВА', '12 ЛЕТ', '600+',
+        'БОЛЕЕ 500 МЛН', '@AlinaVasileva', 'mobile-id',
+        'alina-portrait-final-nohalo.png', 'hero-v5-mobile-1440x2560.avif',
+        'hero-v5-desktop-3840x2160.avif',
+    ]
     for token in required:
         if token not in text:
             raise SystemExit(f'Missing required HTML token: {token}')
