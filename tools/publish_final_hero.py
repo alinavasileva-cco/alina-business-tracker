@@ -38,21 +38,14 @@ def build_responsive_plates() -> None:
 
 
 def clean_portrait() -> None:
-    """Defringe the existing transparent portrait without regenerating the subject.
-
-    RGB contamination on the outer matte is pulled from the nearest opaque interior.
-    The last few source pixels of alpha are made deliberately more transparent so
-    blonde hair blends into the warm architectural background instead of producing
-    a white/grey outline.
-    """
     im = Image.open(PORTRAIT_IN).convert('RGBA')
     arr = np.array(im).astype(np.float32)
     rgb = arr[:, :, :3]
     alpha = arr[:, :, 3] / 255.0
 
-    visible = alpha > 0.008
+    visible = alpha > 0.006
     distance_inside = ndi.distance_transform_edt(visible)
-    interior = (distance_inside >= 9) & (alpha > 0.985)
+    interior = (distance_inside >= 10) & (alpha > 0.985)
     if not interior.any():
         interior = (distance_inside >= 6) & (alpha > 0.95)
     _, inds = ndi.distance_transform_edt(~interior, return_indices=True)
@@ -60,31 +53,31 @@ def clean_portrait() -> None:
 
     luminance = rgb.mean(axis=2)
     chroma = rgb.max(axis=2) - rgb.min(axis=2)
-    edge_strength = np.clip((8.0 - distance_inside) / 8.0, 0, 1)
-    semi_strength = np.clip((0.997 - alpha) / 0.42, 0, 1)
-    weight = np.maximum(edge_strength * 0.97, semi_strength * 0.95) * visible
+    edge_strength = np.clip((10.0 - distance_inside) / 10.0, 0, 1)
+    semi_strength = np.clip((0.998 - alpha) / 0.36, 0, 1)
+    weight = np.maximum(edge_strength * 0.99, semi_strength * 0.98) * visible
 
-    pale_neutral = (luminance > 165) & (chroma < 70) & (distance_inside < 11)
+    pale_neutral = (luminance > 150) & (chroma < 82) & (distance_inside < 13)
     weight[pale_neutral] = np.maximum(
         weight[pale_neutral],
-        np.clip((11 - distance_inside[pale_neutral]) / 11, 0, 1),
+        np.clip((13 - distance_inside[pale_neutral]) / 13, 0, 1),
     )
     rgb = rgb * (1 - weight[..., None]) + nearest * weight[..., None]
 
     alpha_img = Image.fromarray(np.clip(alpha * 255, 0, 255).astype(np.uint8), 'L')
-    eroded = np.array(alpha_img.filter(ImageFilter.MinFilter(5))).astype(np.float32) / 255.0
-    alpha2 = np.minimum(alpha, 0.10 * alpha + 0.90 * eroded)
+    eroded = np.array(alpha_img.filter(ImageFilter.MinFilter(7))).astype(np.float32) / 255.0
+    alpha2 = np.minimum(alpha, 0.04 * alpha + 0.96 * eroded)
 
-    outer = visible & (distance_inside < 3.2)
-    outer_factor = np.clip((distance_inside - 0.15) / 3.05, 0.08, 1.0)
+    outer = visible & (distance_inside < 4.6)
+    outer_factor = np.clip((distance_inside - 0.08) / 4.52, 0.03, 1.0)
     alpha2[outer] *= outer_factor[outer]
 
-    halo_zone = pale_neutral & (distance_inside < 5.0)
-    alpha2[halo_zone] *= 0.48
+    halo_zone = pale_neutral & (distance_inside < 6.5)
+    alpha2[halo_zone] *= 0.28
 
-    alpha2_img = Image.fromarray(np.clip(alpha2 * 255, 0, 255).astype(np.uint8), 'L').filter(ImageFilter.GaussianBlur(0.22))
+    alpha2_img = Image.fromarray(np.clip(alpha2 * 255, 0, 255).astype(np.uint8), 'L').filter(ImageFilter.GaussianBlur(0.30))
     alpha2 = np.array(alpha2_img).astype(np.float32) / 255.0
-    alpha2[alpha2 < 0.014] = 0
+    alpha2[alpha2 < 0.012] = 0
 
     premul = rgb * alpha2[..., None]
     rgba_pm = np.dstack([np.clip(premul, 0, 255), np.clip(alpha2 * 255, 0, 255)]).astype(np.uint8)
@@ -138,7 +131,7 @@ def validate() -> None:
     text = HTML_OUT.read_text(encoding='utf-8')
     required = [
         'GROWTH', 'NEEDS', 'SPACE', 'АЛИНА ВАСИЛЬЕВА', '12 ЛЕТ', '600+',
-        'БОЛЕЕ 500 МЛН', '@AlinaVasileva', 'mobile-id',
+        'БОЛЕЕ 500 МЛН', '@AlinaVasileva', 'mobile-name',
         'alina-portrait-final-nohalo.png', 'hero-v5-mobile-1440x2560.avif',
         'hero-v5-desktop-3840x2160.avif',
     ]
