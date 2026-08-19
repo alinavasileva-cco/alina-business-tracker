@@ -38,57 +38,63 @@ def build_responsive_plates() -> None:
 
 
 def clean_portrait() -> None:
+    """Keep the original subject, remove only matte contamination at the alpha edge."""
     im = Image.open(PORTRAIT_IN).convert('RGBA')
     arr = np.array(im).astype(np.float32)
     rgb = arr[:, :, :3]
     alpha = arr[:, :, 3] / 255.0
 
-    visible = alpha > 0.006
+    visible = alpha > 0.004
     distance_inside = ndi.distance_transform_edt(visible)
-    interior = (distance_inside >= 10) & (alpha > 0.985)
+    interior = (distance_inside >= 11) & (alpha > 0.992)
     if not interior.any():
-        interior = (distance_inside >= 6) & (alpha > 0.95)
+        interior = (distance_inside >= 7) & (alpha > 0.97)
     _, inds = ndi.distance_transform_edt(~interior, return_indices=True)
     nearest = rgb[inds[0], inds[1]]
 
     luminance = rgb.mean(axis=2)
     chroma = rgb.max(axis=2) - rgb.min(axis=2)
-    edge_strength = np.clip((10.0 - distance_inside) / 10.0, 0, 1)
-    semi_strength = np.clip((0.998 - alpha) / 0.36, 0, 1)
-    weight = np.maximum(edge_strength * 0.99, semi_strength * 0.98) * visible
+    edge_strength = np.clip((12.0 - distance_inside) / 12.0, 0, 1)
+    semi_strength = np.clip((0.999 - alpha) / 0.32, 0, 1)
+    weight = np.maximum(edge_strength * 0.995, semi_strength * 0.99) * visible
 
-    pale_neutral = (luminance > 150) & (chroma < 82) & (distance_inside < 13)
+    pale_neutral = (luminance > 145) & (chroma < 90) & (distance_inside < 15)
     weight[pale_neutral] = np.maximum(
         weight[pale_neutral],
-        np.clip((13 - distance_inside[pale_neutral]) / 13, 0, 1),
+        np.clip((15 - distance_inside[pale_neutral]) / 15, 0, 1),
     )
     rgb = rgb * (1 - weight[..., None]) + nearest * weight[..., None]
 
     alpha_img = Image.fromarray(np.clip(alpha * 255, 0, 255).astype(np.uint8), 'L')
     eroded = np.array(alpha_img.filter(ImageFilter.MinFilter(7))).astype(np.float32) / 255.0
-    alpha2 = np.minimum(alpha, 0.04 * alpha + 0.96 * eroded)
+    alpha2 = np.minimum(alpha, 0.02 * alpha + 0.98 * eroded)
 
-    outer = visible & (distance_inside < 4.6)
-    outer_factor = np.clip((distance_inside - 0.08) / 4.52, 0.03, 1.0)
+    outer = visible & (distance_inside < 5.4)
+    outer_factor = np.clip((distance_inside - 0.04) / 5.36, 0.015, 1.0)
     alpha2[outer] *= outer_factor[outer]
 
-    halo_zone = pale_neutral & (distance_inside < 6.5)
-    alpha2[halo_zone] *= 0.28
+    # The remaining visible problem is a pale/white matte around blonde hair.
+    # Make that narrow contour transparent rather than painting it beige.
+    halo_zone = pale_neutral & (distance_inside < 8.5)
+    halo_fade = np.clip((distance_inside - 0.2) / 8.3, 0.02, 1.0)
+    alpha2[halo_zone] *= (0.08 * halo_fade[halo_zone])
 
-    alpha2_img = Image.fromarray(np.clip(alpha2 * 255, 0, 255).astype(np.uint8), 'L').filter(ImageFilter.GaussianBlur(0.30))
+    alpha2_img = Image.fromarray(np.clip(alpha2 * 255, 0, 255).astype(np.uint8), 'L').filter(ImageFilter.GaussianBlur(0.34))
     alpha2 = np.array(alpha2_img).astype(np.float32) / 255.0
-    alpha2[alpha2 < 0.012] = 0
+    alpha2[alpha2 < 0.010] = 0
 
     premul = rgb * alpha2[..., None]
     rgba_pm = np.dstack([np.clip(premul, 0, 255), np.clip(alpha2 * 255, 0, 255)]).astype(np.uint8)
     up = Image.fromarray(rgba_pm, 'RGBA').resize(PORTRAIT_SIZE, Image.Resampling.LANCZOS)
+
+    # A final one-pixel output erosion prevents resampling from recreating a light ring.
     up_arr = np.array(up).astype(np.float32)
-    a = up_arr[:, :, 3:4] / 255.0
+    output_alpha = Image.fromarray(up_arr[:, :, 3].astype(np.uint8), 'L').filter(ImageFilter.MinFilter(3)).filter(ImageFilter.GaussianBlur(0.18))
+    a = np.array(output_alpha).astype(np.float32)[..., None] / 255.0
     pm = up_arr[:, :, :3]
-    out_rgb = np.zeros_like(pm)
-    mask = a[:, :, 0] > 0.002
-    out_rgb[mask] = np.clip(pm[mask] / a[mask], 0, 255)
-    out = np.dstack([out_rgb.astype(np.uint8), up_arr[:, :, 3].astype(np.uint8)])
+    old_a = np.maximum(up_arr[:, :, 3:4] / 255.0, 1e-6)
+    straight_rgb = np.clip(pm / old_a, 0, 255)
+    out = np.dstack([straight_rgb.astype(np.uint8), np.clip(a[:, :, 0] * 255, 0, 255).astype(np.uint8)])
     Image.fromarray(out, 'RGBA').save(PORTRAIT_OUT, 'PNG', optimize=True)
 
 
