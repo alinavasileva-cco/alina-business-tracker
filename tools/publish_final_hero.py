@@ -38,44 +38,53 @@ def build_responsive_plates() -> None:
 
 
 def clean_portrait() -> None:
-    """Remove white/grey matte only at the alpha contour, then upscale premultiplied.
+    """Defringe the existing transparent portrait without regenerating the subject.
 
-    The subject is not regenerated or geometrically altered. Edge pixels are colour-pulled
-    from the nearest opaque interior and the outermost alpha is contracted by roughly one
-    source pixel to eliminate the visible white halo on warm/dark backgrounds.
+    RGB contamination on the outer matte is pulled from the nearest opaque interior.
+    The last few source pixels of alpha are made deliberately more transparent so
+    blonde hair blends into the warm architectural background instead of producing
+    a white/grey outline.
     """
     im = Image.open(PORTRAIT_IN).convert('RGBA')
     arr = np.array(im).astype(np.float32)
     rgb = arr[:, :, :3]
     alpha = arr[:, :, 3] / 255.0
 
-    visible = alpha > 0.01
+    visible = alpha > 0.008
     distance_inside = ndi.distance_transform_edt(visible)
-    interior = (distance_inside >= 8) & (alpha > 0.985)
+    interior = (distance_inside >= 9) & (alpha > 0.985)
     if not interior.any():
-        interior = (distance_inside >= 5) & (alpha > 0.95)
+        interior = (distance_inside >= 6) & (alpha > 0.95)
     _, inds = ndi.distance_transform_edt(~interior, return_indices=True)
     nearest = rgb[inds[0], inds[1]]
 
     luminance = rgb.mean(axis=2)
     chroma = rgb.max(axis=2) - rgb.min(axis=2)
-    edge_strength = np.clip((6.0 - distance_inside) / 6.0, 0, 1)
-    semi_strength = np.clip((0.995 - alpha) / 0.38, 0, 1)
-    weight = np.maximum(edge_strength * 0.94, semi_strength * 0.90) * visible
+    edge_strength = np.clip((8.0 - distance_inside) / 8.0, 0, 1)
+    semi_strength = np.clip((0.997 - alpha) / 0.42, 0, 1)
+    weight = np.maximum(edge_strength * 0.97, semi_strength * 0.95) * visible
 
-    pale_neutral = (luminance > 170) & (chroma < 55) & (distance_inside < 9)
+    pale_neutral = (luminance > 165) & (chroma < 70) & (distance_inside < 11)
     weight[pale_neutral] = np.maximum(
         weight[pale_neutral],
-        np.clip((9 - distance_inside[pale_neutral]) / 9, 0, 1),
+        np.clip((11 - distance_inside[pale_neutral]) / 11, 0, 1),
     )
     rgb = rgb * (1 - weight[..., None]) + nearest * weight[..., None]
 
     alpha_img = Image.fromarray(np.clip(alpha * 255, 0, 255).astype(np.uint8), 'L')
-    eroded = np.array(alpha_img.filter(ImageFilter.MinFilter(3))).astype(np.float32) / 255.0
-    alpha2 = np.minimum(alpha, 0.35 * alpha + 0.65 * eroded)
-    alpha2_img = Image.fromarray(np.clip(alpha2 * 255, 0, 255).astype(np.uint8), 'L').filter(ImageFilter.GaussianBlur(0.35))
+    eroded = np.array(alpha_img.filter(ImageFilter.MinFilter(5))).astype(np.float32) / 255.0
+    alpha2 = np.minimum(alpha, 0.10 * alpha + 0.90 * eroded)
+
+    outer = visible & (distance_inside < 3.2)
+    outer_factor = np.clip((distance_inside - 0.15) / 3.05, 0.08, 1.0)
+    alpha2[outer] *= outer_factor[outer]
+
+    halo_zone = pale_neutral & (distance_inside < 5.0)
+    alpha2[halo_zone] *= 0.48
+
+    alpha2_img = Image.fromarray(np.clip(alpha2 * 255, 0, 255).astype(np.uint8), 'L').filter(ImageFilter.GaussianBlur(0.22))
     alpha2 = np.array(alpha2_img).astype(np.float32) / 255.0
-    alpha2[alpha2 < 0.018] = 0
+    alpha2[alpha2 < 0.014] = 0
 
     premul = rgb * alpha2[..., None]
     rgba_pm = np.dstack([np.clip(premul, 0, 255), np.clip(alpha2 * 255, 0, 255)]).astype(np.uint8)
@@ -94,6 +103,9 @@ def publish_html() -> None:
     if not HTML_IN.exists():
         raise SystemExit(f'Missing {HTML_IN}')
     shutil.copy2(HTML_IN, HTML_OUT)
+    text = HTML_OUT.read_text(encoding='utf-8')
+    text = text.replace('<small>TELEGRAM</small>', '')
+    HTML_OUT.write_text(text, encoding='utf-8')
 
 
 def validate() -> None:
@@ -133,7 +145,7 @@ def validate() -> None:
     for token in required:
         if token not in text:
             raise SystemExit(f'Missing required HTML token: {token}')
-    forbidden = ['object-fit: fill', 'data:image/', 'drop-shadow(', 'filter:drop-shadow', 'nav-dot']
+    forbidden = ['object-fit: fill', 'data:image/', 'drop-shadow(', 'filter:drop-shadow', 'nav-dot', '<small>TELEGRAM</small>']
     for token in forbidden:
         if token in text:
             raise SystemExit(f'Forbidden HTML/CSS token present: {token}')
