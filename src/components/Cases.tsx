@@ -1,4 +1,3 @@
-import { useRef, useState } from 'react';
 import { cases } from '../content';
 import CaseSection from './CaseSection';
 
@@ -19,44 +18,24 @@ const images = {
 };
 
 export default function Cases() {
-  const railRef = useRef<HTMLDivElement>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  const move = (direction: -1 | 1) => {
-    const next = Math.min(Math.max(activeIndex + direction, 0), cases.length - 1);
-    const rail = railRef.current;
-    rail?.scrollTo({ left: next * rail.clientWidth, behavior: 'smooth' });
-    setActiveIndex(next);
-  };
-
   return (
-    <section className="cases section" id="cases" aria-labelledby="cases-title">
-      <div className="section-heading shell" data-reveal>
+    <section className="cases" id="cases" aria-labelledby="cases-title">
+      <header className="cases__intro shell" data-reveal>
         <div>
           <p className="eyebrow">Практика</p>
           <h2 id="cases-title">Кейсы</h2>
         </div>
         <p>Коммерческие системы, в которых стратегия связана с процессами, цифрами и ответственностью за результат.</p>
-      </div>
+      </header>
 
-      <div className="cases__controls shell" aria-label="Навигация по кейсам">
-        <button type="button" onClick={() => move(-1)} disabled={activeIndex === 0} aria-label="Предыдущий кейс">←</button>
-        <p aria-live="polite"><span>{activeIndex + 1}</span> / {cases.length}</p>
-        <button type="button" onClick={() => move(1)} disabled={activeIndex === cases.length - 1} aria-label="Следующий кейс">→</button>
-      </div>
-
-      <div
-        className="cases__rail"
-        ref={railRef}
-        tabIndex={0}
-        aria-label="Четыре кейса. На больших экранах список прокручивается по горизонтали"
-        onScroll={(event) => {
-          const rail = event.currentTarget;
-          if (rail.clientWidth > 0) setActiveIndex(Math.round(rail.scrollLeft / rail.clientWidth));
-        }}
-      >
-        {cases.map((caseStudy) => (
-          <CaseSection caseStudy={caseStudy} image={images[caseStudy.imageKey]} key={caseStudy.id} />
+      <div className="cases__stack">
+        {cases.map((caseStudy, index) => (
+          <CaseSection
+            caseStudy={caseStudy}
+            image={images[caseStudy.imageKey]}
+            index={index}
+            key={caseStudy.id}
+          />
         ))}
       </div>
     </section>
