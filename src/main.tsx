@@ -6,6 +6,7 @@ import './styles/global.css';
 import './styles/layout.css';
 import './styles/responsive.css';
 import './styles/integration.css';
+import './styles/integrated.css';
 
 document.documentElement.classList.add('js');
 
