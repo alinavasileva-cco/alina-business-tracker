@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
-import Clients from './components/Clients';
 import Services from './components/Services';
 import Profile from './components/Profile';
 import Expertise from './components/Expertise';
@@ -42,7 +41,6 @@ export default function App() {
       <Header />
       <main className="site-main" id="main-content">
         <Hero />
-        <Clients />
         <Services />
         <Profile />
         <Expertise />
