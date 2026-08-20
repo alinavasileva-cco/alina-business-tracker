@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 const navigation = [
   ['Обо мне', '#profile'],
-  ['Экспертиза', '#expertise'],
+  ['Услуги', '#services'],
   ['Кейсы', '#cases'],
   ['Опыт', '#experience'],
   ['Контакты', '#contact'],
@@ -16,7 +16,6 @@ export default function Header() {
 
   useEffect(() => {
     document.body.classList.toggle('menu-open', open);
-    if (open) navRef.current?.querySelector<HTMLAnchorElement>('a')?.focus({ preventScroll: true });
     return () => document.body.classList.remove('menu-open');
   }, [open]);
 
@@ -31,7 +30,7 @@ export default function Header() {
   }, [open]);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => setScrolled(window.scrollY > 28);
     const desktop = window.matchMedia('(min-width: 1024px)');
     const onDesktop = (event: MediaQueryListEvent) => event.matches && setOpen(false);
     onScroll();
@@ -50,18 +49,17 @@ export default function Header() {
         ref={toggleRef}
         className="menu-toggle"
         type="button"
+        aria-label={open ? 'Закрыть меню' : 'Открыть меню'}
         aria-expanded={open}
         aria-controls="site-nav"
         onClick={() => setOpen((value) => !value)}
       >
-        <span className="menu-toggle__label">{open ? 'Закрыть' : 'Меню'}</span>
         <span className="menu-toggle__icon" aria-hidden="true"><i /><i /></span>
       </button>
       <nav ref={navRef} className={`site-nav${open ? ' is-open' : ''}`} id="site-nav" aria-label="Основная навигация">
         {navigation.map(([label, href]) => (
           <a key={href} href={href} onClick={() => setOpen(false)}>{label}</a>
         ))}
-        <i className="nav-dot" aria-hidden="true" />
       </nav>
     </header>
   );
