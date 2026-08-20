@@ -5,7 +5,6 @@ import Services from './components/Services';
 import Profile from './components/Profile';
 import Cases from './components/Cases';
 import Experience from './components/Experience';
-import Approach from './components/Approach';
 import Education from './components/Education';
 import Contact from './components/Contact';
 
@@ -44,7 +43,6 @@ export default function App() {
         <Profile />
         <Cases />
         <Experience />
-        <Approach />
         <Education />
       </main>
       <Contact />
