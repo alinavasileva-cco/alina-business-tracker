@@ -20,19 +20,6 @@ export default function CaseSection({ caseStudy, image, index }: CaseSectionProp
       id={caseStudy.id}
       aria-labelledby={`${caseStudy.id}-title`}
     >
-      <picture className="case-story__art" aria-hidden="true">
-        <source srcSet={image.webp} type="image/webp" />
-        <img
-          src={image.png}
-          alt=""
-          width={image.width}
-          height={image.height}
-          loading="lazy"
-          decoding="async"
-        />
-      </picture>
-      <div className="case-story__wash" aria-hidden="true" />
-
       <div className="case-story__content shell">
         <div className="case-story__index" aria-hidden="true">0{index + 1}</div>
 
@@ -42,6 +29,18 @@ export default function CaseSection({ caseStudy, image, index }: CaseSectionProp
           {caseStudy.company && <p className="case-story__company">{caseStudy.company}</p>}
           <p className="case-story__lead">{caseStudy.lead}</p>
         </header>
+
+        <picture className="case-story__art" data-reveal>
+          <source srcSet={image.webp} type="image/webp" />
+          <img
+            src={image.png}
+            alt={caseStudy.alt}
+            width={image.width}
+            height={image.height}
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
 
         <div className="case-story__metrics" aria-label="Результаты" data-reveal>
           {caseStudy.metrics.map((metric) => (
