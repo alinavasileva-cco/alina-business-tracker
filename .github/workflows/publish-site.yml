@@ -1,0 +1,60 @@
+name: Publish full premium site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'web/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'vite.config.ts'
+      - '.github/workflows/publish-site.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-full-site
+  cancel-in-progress: true
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Typecheck and build
+        run: npm run build
+
+      - name: Stage GitHub Pages output
+        run: |
+          cp dist/index.html index.html
+          mkdir -p assets
+          cp -R dist/assets/. assets/
+          touch .nojekyll
+
+      - name: Commit production site
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html assets .nojekyll
+          if git diff --cached --quiet; then
+            echo 'No production changes to publish.'
+            exit 0
+          fi
+          git commit -m 'Publish full premium responsive site'
+          git push
