@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import type { CaseStudy } from '../content';
 
 type CaseImage = {
@@ -10,44 +11,38 @@ type CaseImage = {
 type CaseSectionProps = {
   caseStudy: CaseStudy;
   image: CaseImage;
-  index: number;
 };
 
-export default function CaseSection({ caseStudy, image, index }: CaseSectionProps) {
+export default function CaseSection({ caseStudy, image }: CaseSectionProps) {
+  const sceneStyle = {
+    '--case-scene': `url("${image.webp}")`,
+  } as CSSProperties;
+
   return (
     <article
-      className={`case-story case-story--${caseStudy.imageKey}`}
+      className={`case-v9 case-v9--${caseStudy.imageKey}`}
       id={caseStudy.id}
       aria-labelledby={`${caseStudy.id}-title`}
     >
-      <div className="case-story__content shell">
-        <div className="case-story__index" aria-hidden="true">0{index + 1}</div>
-
-        <header className="case-story__header" data-reveal>
-          <p className="eyebrow">{caseStudy.eyebrow}</p>
+      <div className="case-v9__inner section-shell">
+        <header className="case-v9__header" data-reveal>
+          <p className="section-kicker">{caseStudy.eyebrow}</p>
           <h3 id={`${caseStudy.id}-title`}>{caseStudy.title}</h3>
-          {caseStudy.company && <p className="case-story__company">{caseStudy.company}</p>}
-          <p className="case-story__lead">{caseStudy.lead}</p>
+          {caseStudy.company && <p className="case-v9__company">{caseStudy.company}</p>}
+          <p className="case-v9__lead">{caseStudy.lead}</p>
         </header>
 
-        <picture className="case-story__art" data-reveal>
-          <source srcSet={image.webp} type="image/webp" />
-          <img
-            src={image.png}
-            alt={caseStudy.alt}
-            width={image.width}
-            height={image.height}
-            loading="lazy"
-            decoding="async"
-          />
-        </picture>
+        <div
+          className="case-v9__scene"
+          style={sceneStyle}
+          role="img"
+          aria-label={caseStudy.alt}
+          data-reveal
+        />
 
-        <div className="case-story__metrics" aria-label="Результаты" data-reveal>
-          {caseStudy.metrics.map((metric) => (
-            <div
-              className={`case-story__metric${metric.accent ? ' is-accent' : ''}${metric.long ? ' is-long' : ''}`}
-              key={`${metric.value}-${metric.label}`}
-            >
+        <div className="case-v9__metrics" aria-label="Ключевые результаты" data-reveal>
+          {caseStudy.metrics.slice(0, 4).map((metric) => (
+            <div className={`case-v9__metric${metric.accent ? ' is-accent' : ''}`} key={`${metric.value}-${metric.label}`}>
               <strong>{metric.value}</strong>
               <span>{metric.label}</span>
             </div>
