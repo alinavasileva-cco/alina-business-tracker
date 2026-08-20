@@ -53,23 +53,6 @@ export default function CaseSection({ caseStudy, image, index }: CaseSectionProp
             </div>
           ))}
         </div>
-
-        <div className="case-story__details" data-reveal>
-          <div>
-            <p className="detail-label">Проблематика</p>
-            <p>{caseStudy.problem}</p>
-          </div>
-          <div>
-            <p className="detail-label">На выходе</p>
-            <ul>{caseStudy.outcome.map((item) => <li key={item}>{item}</li>)}</ul>
-          </div>
-          {caseStudy.note && (
-            <div className="case-story__note">
-              <p className="detail-label">{caseStudy.note.label}</p>
-              <p>{caseStudy.note.value}</p>
-            </div>
-          )}
-        </div>
       </div>
     </article>
   );
