@@ -1,30 +1,34 @@
 import { education } from '../content';
 
+const selectedEducation = education.filter(([, title]) => ![
+  'Яндекс.Директ',
+  'Школа журналистики при СПбГУП',
+  'Малый журфак при НовГУ им. Ярослава Мудрого',
+].includes(title));
+
 export default function Education() {
   return (
-    <section className="education section shell" aria-labelledby="education-title">
-      <div className="section-heading" data-reveal>
-        <div>
-          <p className="eyebrow">Знания и развитие</p>
+    <section className="education education--v9" aria-labelledby="education-title">
+      <div className="section-shell education-v9__inner">
+        <header className="education-v9__header" data-reveal>
+          <p className="section-kicker">Знания и развитие</p>
           <h2 id="education-title">Образование</h2>
+        </header>
+
+        <div className="education-v9__degree" data-reveal>
+          <span>Высшее образование</span>
+          <strong>Журналист · СПбГУП</strong>
         </div>
-      </div>
 
-      <div className="education__degree" data-reveal>
-        <p>Высшее образование</p>
-        <h3>Журналист — СПбГУП</h3>
-      </div>
-
-      <div className="education__timeline">
-        {education.map(([year, title, source]) => (
-          <article key={`${year}-${title}`} data-reveal>
-            <time>{year}</time>
-            <div>
+        <div className="education-v9__grid">
+          {selectedEducation.map(([year, title, source]) => (
+            <article className="education-v9__item" key={`${year}-${title}`} data-reveal>
+              <time>{year}</time>
               <h3>{title}</h3>
               <p>{source}</p>
-            </div>
-          </article>
-        ))}
+            </article>
+          ))}
+        </div>
       </div>
     </section>
   );
