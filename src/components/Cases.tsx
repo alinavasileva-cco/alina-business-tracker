@@ -19,21 +19,18 @@ const images = {
 
 export default function Cases() {
   return (
-    <section className="cases" id="cases" aria-labelledby="cases-title">
-      <header className="cases__intro shell" data-reveal>
-        <div>
-          <p className="eyebrow">Практика</p>
-          <h2 id="cases-title">Кейсы</h2>
-        </div>
-        <p>Коммерческие системы, в которых стратегия связана с процессами, цифрами и ответственностью за результат.</p>
+    <section className="cases cases--v9" id="cases" aria-labelledby="cases-title">
+      <header className="cases-v9__intro section-shell" data-reveal>
+        <p className="section-kicker">Практика</p>
+        <h2 id="cases-title">Кейсы</h2>
+        <p>Четыре коммерческие задачи — коротко, через результат и цифры.</p>
       </header>
 
-      <div className="cases__stack">
-        {cases.map((caseStudy, index) => (
+      <div className="cases-v9__stack">
+        {cases.map((caseStudy) => (
           <CaseSection
             caseStudy={caseStudy}
             image={images[caseStudy.imageKey]}
-            index={index}
             key={caseStudy.id}
           />
         ))}
