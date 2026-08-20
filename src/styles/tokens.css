@@ -15,16 +15,16 @@
 }
 
 :root {
-  --paper: #e8d8c9;
-  --paper-soft: #eee3d8;
-  --paper-deep: #ddcdbd;
-  --stone: #cdbba9;
-  --ink: #18130f;
-  --muted: #726358;
-  --line: rgb(24 19 15 / 14%);
-  --line-strong: rgb(24 19 15 / 28%);
-  --accent: #c94a36;
-  --accent-dark: #a83a2a;
+  --paper: #EEE8DE;
+  --paper-soft: #F3EDE4;
+  --paper-deep: #E5D9CA;
+  --stone: #CDBBA9;
+  --ink: #18130F;
+  --muted: #74675D;
+  --line: rgb(24 19 15 / 12%);
+  --line-strong: rgb(24 19 15 / 24%);
+  --accent: #C94A36;
+  --accent-dark: #A83A2A;
   --header-height: 72px;
   --shell: min(1760px, calc(100vw - 7.2vw));
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
