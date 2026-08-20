@@ -1,10 +1,8 @@
-import { clients } from '../content';
-
 export default function Hero() {
   const base = import.meta.env.BASE_URL;
   const desktopScene = `${base}v2/assets/hero-v5-desktop-3840x2160.avif`;
   const mobileScene = `${base}v2/assets/hero-v5-mobile-1440x2560.avif`;
-  const portrait = `${base}v2/assets/alina-portrait-final-nohalo.png?v=full-site-v2`;
+  const portrait = `${base}v2/assets/alina-portrait-final-nohalo.png?v=full-site-v3`;
 
   return (
     <section className="hero" id="hero" aria-labelledby="hero-name">
@@ -48,10 +46,6 @@ export default function Hero() {
         <div><dt>600+</dt><dd>Коммерческих проектов</dd></div>
         <div><dt>БОЛЕЕ 500 МЛН</dt><dd>Помогла заработать компаниям</dd></div>
       </dl>
-
-      <p className="hero__clients" aria-label="Компании, с которыми работала">
-        {clients.join(' · ')}
-      </p>
     </section>
   );
 }
