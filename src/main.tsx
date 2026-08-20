@@ -5,6 +5,7 @@ import './styles/tokens.css';
 import './styles/global.css';
 import './styles/layout.css';
 import './styles/responsive.css';
+import './styles/integration.css';
 
 document.documentElement.classList.add('js');
 
