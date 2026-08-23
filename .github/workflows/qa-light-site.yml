@@ -30,7 +30,10 @@ jobs:
 
       - name: Start production preview
         run: |
-          npm run preview -- --host 127.0.0.1 --port 4173 --strictPort > /tmp/alina-preview.log 2>&1 &
+          mkdir -p /tmp/alina-site/alina-business-tracker
+          cp -R dist/. /tmp/alina-site/alina-business-tracker/
+          cp -R v2 /tmp/alina-site/alina-business-tracker/v2
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory /tmp/alina-site > /tmp/alina-preview.log 2>&1 &
           for attempt in {1..30}; do
             if curl --fail --silent http://127.0.0.1:4173/alina-business-tracker/ > /dev/null; then
               exit 0

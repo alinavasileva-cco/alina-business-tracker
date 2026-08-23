@@ -143,17 +143,22 @@ for (const viewport of viewports) {
 
     const rail = document.querySelector('.experience-v9__rail');
     const railOverflow = rail ? rail.scrollWidth - rail.clientWidth : null;
+    const brokenImages = Array.from(document.querySelectorAll('.hero img,.case-v9 img'))
+      .filter((image) => image.naturalWidth === 0)
+      .map((image) => image.currentSrc || image.src);
 
     return {
       viewport: { width: innerWidth, height: innerHeight },
       documentOverflow: document.documentElement.scrollWidth - innerWidth,
       outOfBounds,
       heroOverlaps,
+      heroRects: { portrait, heroCopy, heroTelegram, growth, needs },
       caseScenes,
       caseRatioSpread: Math.max(...caseScenes.map((scene) => scene.ratio)) - Math.min(...caseScenes.map((scene) => scene.ratio)),
       profileNumbers,
       metricMisalignment,
       railOverflow,
+      brokenImages,
       bodyBackground: getComputedStyle(document.body).backgroundColor,
     };
   });
@@ -166,6 +171,7 @@ for (const viewport of viewports) {
   if (geometry.caseRatioSpread > 0.02) failures.push(`case ratio spread ${geometry.caseRatioSpread.toFixed(4)}`);
   if (geometry.metricMisalignment.length) failures.push(`metric misalignment: ${geometry.metricMisalignment.join(', ')}`);
   if (geometry.railOverflow > 1) failures.push(`experience rail overflow ${geometry.railOverflow}px`);
+  if (geometry.brokenImages.length) failures.push(`${geometry.brokenImages.length} broken images`);
   if (consoleErrors.length) failures.push(`${consoleErrors.length} console errors`);
 
   const report = { ...viewport, geometry, consoleErrors, failures };
