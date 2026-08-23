@@ -36,17 +36,29 @@ for (const viewport of viewports) {
 
   await page.goto(baseUrl, { waitUntil: 'networkidle' });
   await page.evaluate(async () => {
+    document.querySelectorAll('img').forEach((image) => {
+      image.loading = 'eager';
+    });
+    const pageHeight = document.documentElement.scrollHeight;
+    for (let y = 0; y < pageHeight; y += innerHeight) {
+      scrollTo(0, y);
+      await new Promise((resolve) => setTimeout(resolve, 60));
+    }
+    scrollTo(0, 0);
     await document.fonts.ready;
-    await Promise.all(
-      Array.from(document.images, (image) => (
-        image.complete
-          ? Promise.resolve()
-          : new Promise((resolve) => {
-              image.addEventListener('load', resolve, { once: true });
-              image.addEventListener('error', resolve, { once: true });
-            })
-      )),
-    );
+    await Promise.race([
+      Promise.all(
+        Array.from(document.images, (image) => (
+          image.complete
+            ? Promise.resolve()
+            : new Promise((resolve) => {
+                image.addEventListener('load', resolve, { once: true });
+                image.addEventListener('error', resolve, { once: true });
+              })
+        )),
+      ),
+      new Promise((resolve) => setTimeout(resolve, 10_000)),
+    ]);
   });
 
   const geometry = await page.evaluate(() => {
