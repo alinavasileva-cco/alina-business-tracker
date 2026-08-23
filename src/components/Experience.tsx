@@ -5,18 +5,18 @@ export default function Experience() {
     <section className="experience experience--v9" id="experience" aria-labelledby="experience-title">
       <div className="experience-v9__head section-shell" data-reveal>
         <p className="section-kicker">Профессиональный путь</p>
-        <h2 className="sr-only" id="experience-title">Профессиональный путь</h2>
+        <h2 id="experience-title">Опыт</h2>
       </div>
 
-      <div className="experience-v9__rail" aria-label="Управленческий опыт">
+      <div className="experience-v9__rail section-shell" aria-label="Управленческий опыт">
         {experience.map(([period, role, company, scope]) => (
           <article className="experience-v9__card" key={`${period}-${company}`} data-reveal>
-            <h3>{role}</h3>
-            <p>{scope}</p>
-            <footer>
-              <strong>{period}</strong>
-              <span>{company}</span>
-            </footer>
+            <strong className="experience-v9__period">{period}</strong>
+            <div className="experience-v9__role">
+              <h3>{role}</h3>
+              <p>{company}</p>
+            </div>
+            <p className="experience-v9__scope">{scope}</p>
           </article>
         ))}
       </div>

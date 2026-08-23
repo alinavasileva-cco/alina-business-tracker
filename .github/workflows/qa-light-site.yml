@@ -1,0 +1,49 @@
+name: Temporary responsive layout QA
+
+on:
+  push:
+    branches:
+      - fix/light-site-layout-qa-20260823
+
+permissions:
+  contents: read
+
+jobs:
+  visual-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm install --no-save playwright@1.55.0
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build
+
+      - name: Start production preview
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 --strictPort > /tmp/alina-preview.log 2>&1 &
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:4173/alina-business-tracker/ > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/alina-preview.log
+          exit 1
+
+      - name: Check responsive layout and capture screenshots
+        run: node .github/qa/layout-qa.mjs
+
+      - name: Upload QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: responsive-layout-qa
+          path: qa-artifacts
+          if-no-files-found: error

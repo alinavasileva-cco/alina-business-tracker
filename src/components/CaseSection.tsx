@@ -1,8 +1,6 @@
-import type { CSSProperties } from 'react';
 import type { CaseStudy } from '../content';
 
 type CaseImage = {
-  png: string;
   webp: string;
   width: number;
   height: number;
@@ -14,10 +12,6 @@ type CaseSectionProps = {
 };
 
 export default function CaseSection({ caseStudy, image }: CaseSectionProps) {
-  const sceneStyle = {
-    '--case-scene': `url("${image.webp}")`,
-  } as CSSProperties;
-
   return (
     <article
       className={`case-v9 case-v9--${caseStudy.imageKey}`}
@@ -32,17 +26,24 @@ export default function CaseSection({ caseStudy, image }: CaseSectionProps) {
           <p className="case-v9__lead">{caseStudy.lead}</p>
         </header>
 
-        <div
-          className="case-v9__scene"
-          style={sceneStyle}
-          role="img"
-          aria-label={caseStudy.alt}
-          data-reveal
-        />
+        <figure className="case-v9__scene" data-reveal>
+          <img
+            className="case-v9__scene-image"
+            src={image.webp}
+            width={image.width}
+            height={image.height}
+            alt={caseStudy.alt}
+            loading="lazy"
+            decoding="async"
+          />
+        </figure>
 
         <div className="case-v9__metrics" aria-label="Ключевые результаты" data-reveal>
           {caseStudy.metrics.slice(0, 4).map((metric) => (
-            <div className={`case-v9__metric${metric.accent ? ' is-accent' : ''}`} key={`${metric.value}-${metric.label}`}>
+            <div
+              className={`case-v9__metric${metric.accent ? ' is-accent' : ''}${metric.long ? ' is-long' : ''}`}
+              key={`${metric.value}-${metric.label}`}
+            >
               <strong>{metric.value}</strong>
               <span>{metric.label}</span>
             </div>
