@@ -43,6 +43,7 @@ jobs:
       - name: Stage GitHub Pages output
         run: |
           cp dist/index.html index.html
+          rm -rf assets
           mkdir -p assets
           cp -R dist/assets/. assets/
           touch .nojekyll
@@ -51,7 +52,7 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add index.html assets .nojekyll
+          git add -A index.html assets .nojekyll
           if git diff --cached --quiet; then
             echo 'No production changes to publish.'
             exit 0
