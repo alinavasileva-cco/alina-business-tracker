@@ -16,13 +16,13 @@
 
 :root {
   --paper: #EEE8DE;
-  --paper-soft: #F3EDE4;
-  --paper-deep: #E5D9CA;
+  --paper-soft: #EEE8DE;
+  --paper-deep: #EEE8DE;
   --stone: #CDBBA9;
   --ink: #18130F;
   --muted: #74675D;
-  --line: rgb(24 19 15 / 12%);
-  --line-strong: rgb(24 19 15 / 24%);
+  --line: transparent;
+  --line-strong: transparent;
   --accent: #C94A36;
   --accent-dark: #A83A2A;
   --header-height: 72px;

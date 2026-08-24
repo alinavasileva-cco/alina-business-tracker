@@ -1,9 +1,8 @@
-export default function Hero() {
-  const base = import.meta.env.BASE_URL;
-  const desktopScene = `${base}v2/assets/hero-v5-desktop-3840x2160.avif`;
-  const mobileScene = `${base}v2/assets/hero-v5-mobile-1440x2560.avif`;
-  const portrait = `${base}v2/assets/alina-portrait-final-nohalo.png?v=full-site-v3`;
+import desktopScene from '../assets/hero/hero-desktop.avif';
+import mobileScene from '../assets/hero/hero-mobile.avif';
+import portrait from '../assets/hero/alina-portrait.png';
 
+export default function Hero() {
   return (
     <section className="hero" id="hero" aria-labelledby="hero-name">
       <div className="hero__scene" aria-hidden="true">

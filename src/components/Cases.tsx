@@ -19,7 +19,6 @@ export default function Cases() {
       <header className="case-library__intro section-shell" data-reveal>
         <p className="section-kicker">Практика</p>
         <h2 id="cases-title">Кейсы</h2>
-        <p>Четыре коммерческие задачи — коротко, через результат и цифры.</p>
       </header>
 
       <div className="case-library__stack">
