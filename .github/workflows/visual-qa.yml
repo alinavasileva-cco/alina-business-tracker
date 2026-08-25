@@ -71,10 +71,11 @@ jobs:
       - name: Capture screenshots
         run: |
           mkdir -p screenshots
-          npx --yes playwright@1.55.0 screenshot --browser chromium --viewport-size='1920,1080' http://127.0.0.1:4173/alina-business-tracker/ screenshots/desktop-1920x1080.png
-          npx --yes playwright@1.55.0 screenshot --browser chromium --viewport-size='1440,900' --full-page http://127.0.0.1:4173/alina-business-tracker/ screenshots/desktop-full-1440.png
-          npx --yes playwright@1.55.0 screenshot --browser chromium --viewport-size='390,844' http://127.0.0.1:4173/alina-business-tracker/ screenshots/mobile-390x844.png
-          npx --yes playwright@1.55.0 screenshot --browser chromium --viewport-size='390,844' --full-page http://127.0.0.1:4173/alina-business-tracker/ screenshots/mobile-full-390.png
+          URL='http://127.0.0.1:4173/alina-business-tracker/?visual-qa=1'
+          npx --yes playwright@1.55.0 screenshot --browser chromium --viewport-size='1920,1080' --wait-for-timeout=900 "$URL" screenshots/desktop-1920x1080.png
+          npx --yes playwright@1.55.0 screenshot --browser chromium --viewport-size='1440,900' --wait-for-timeout=900 --full-page "$URL" screenshots/desktop-full-1440.png
+          npx --yes playwright@1.55.0 screenshot --browser chromium --viewport-size='390,844' --wait-for-timeout=900 "$URL" screenshots/mobile-390x844.png
+          npx --yes playwright@1.55.0 screenshot --browser chromium --viewport-size='390,844' --wait-for-timeout=900 --full-page "$URL" screenshots/mobile-full-390.png
 
       - name: Upload screenshots
         uses: actions/upload-artifact@v4
