@@ -11,13 +11,23 @@ on:
       - 'package-lock.json'
       - 'vite.config.ts'
       - '.github/workflows/publish-site.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'web/**'
+      - 'tools/clean_portrait_v11.py'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'vite.config.ts'
+      - '.github/workflows/publish-site.yml'
   workflow_dispatch:
 
 permissions:
   contents: write
 
 concurrency:
-  group: publish-full-site
+  group: publish-full-site-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -62,6 +72,7 @@ jobs:
         run: npm run build
 
       - name: Stage GitHub Pages output
+        if: github.event_name == 'push'
         run: |
           cp dist/index.html index.html
           rm -rf assets
@@ -70,6 +81,7 @@ jobs:
           touch .nojekyll
 
       - name: Commit production site
+        if: github.event_name == 'push'
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
