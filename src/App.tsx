@@ -3,7 +3,6 @@ import Header from './components/Header';
 import Hero from './components/Hero';
 import Clients from './components/Clients';
 import Services from './components/Services';
-import Profile from './components/Profile';
 import Cases from './components/Cases';
 import Experience from './components/Experience';
 import Education from './components/Education';
@@ -42,7 +41,6 @@ export default function App() {
         <Hero />
         <Clients />
         <Services />
-        <Profile />
         <Cases />
         <Experience />
         <Education />

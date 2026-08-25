@@ -40,10 +40,11 @@ export default function Hero() {
 
       <a className="hero__telegram" href="https://t.me/AlinaVasileva" target="_blank" rel="noopener">@AlinaVasileva ↗</a>
 
-      <dl className="hero__facts" aria-label="Ключевые факты">
+      <dl className="hero__facts" aria-label="Коммерческий профиль">
         <div><dt>12 ЛЕТ</dt><dd>Управленческого опыта</dd></div>
+        <div><dt>P&amp;L</dt><dd>Ответственность за результат</dd></div>
         <div><dt>600+</dt><dd>Коммерческих проектов</dd></div>
-        <div><dt>БОЛЕЕ 500 МЛН</dt><dd>Помогла заработать компаниям</dd></div>
+        <div><dt>500+ МЛН</dt><dd>Помогла заработать компаниям</dd></div>
       </dl>
     </section>
   );
