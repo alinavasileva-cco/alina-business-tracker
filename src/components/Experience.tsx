@@ -11,7 +11,7 @@ export default function Experience() {
       <div className="experience-v9__rail section-shell" aria-label="Управленческий опыт">
         {experience.map(([period, role, company, scope]) => (
           <article className="experience-v9__card" key={`${period}-${company}`} data-reveal>
-            <strong className="experience-v9__period">{period}</strong>
+            <time className="experience-v9__period">{period}</time>
             <div className="experience-v9__role">
               <h3>{role}</h3>
               <p>{company}</p>
