@@ -34,18 +34,18 @@ export default function Hero() {
       <div className="hero__copy" data-reveal>
         <h1 id="hero-name">Алина Васильева</h1>
         <p className="hero__role">Бизнес-трекер · Коммерческий директор / CCO · Head of Business Development</p>
-        <p className="hero__lead">Строю коммерческие системы и точки роста: соединяю продажи, маркетинг, процессы, аналитику и команду в управляемую модель результата.</p>
+
+        <dl className="hero__profile" aria-label="Коммерческий профиль">
+          <div><dt>12 ЛЕТ</dt><dd>Управленческого опыта</dd></div>
+          <div><dt>P&amp;L</dt><dd>Ответственность за результат</dd></div>
+          <div><dt>600+</dt><dd>Коммерческих проектов</dd></div>
+          <div><dt>500+ МЛН</dt><dd>Помогла заработать компаниям</dd></div>
+        </dl>
+
         <a className="text-link" href="#contact"><span>Решить бизнес-задачу</span><span aria-hidden="true">→</span></a>
       </div>
 
       <a className="hero__telegram" href="https://t.me/AlinaVasileva" target="_blank" rel="noopener">@AlinaVasileva ↗</a>
-
-      <dl className="hero__facts" aria-label="Коммерческий профиль">
-        <div><dt>12 ЛЕТ</dt><dd>Управленческого опыта</dd></div>
-        <div><dt>P&amp;L</dt><dd>Ответственность за результат</dd></div>
-        <div><dt>600+</dt><dd>Коммерческих проектов</dd></div>
-        <div><dt>500+ МЛН</dt><dd>Помогла заработать компаниям</dd></div>
-      </dl>
     </section>
   );
 }
