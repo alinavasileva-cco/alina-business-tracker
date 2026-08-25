@@ -12,8 +12,9 @@ export default function App() {
   useEffect(() => {
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const items = Array.from(document.querySelectorAll<HTMLElement>('[data-reveal]'));
+    const visualQa = new URLSearchParams(window.location.search).get('visual-qa') === '1';
 
-    if (reduceMotion.matches || !('IntersectionObserver' in window)) {
+    if (visualQa || reduceMotion.matches || !('IntersectionObserver' in window)) {
       items.forEach((item) => item.classList.add('is-visible'));
       return;
     }
