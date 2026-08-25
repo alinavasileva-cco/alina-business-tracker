@@ -33,7 +33,7 @@
 
 .case-study {
   position: relative;
-  min-height: clamp(620px, 68svh, 760px);
+  min-height: 0;
   overflow: hidden;
   background: var(--paper);
   isolation: isolate;
@@ -88,7 +88,7 @@
 
 .case-study__inner {
   display: grid;
-  min-height: inherit;
+  min-height: 0;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   grid-template-rows: auto auto;
   gap: 0 32px;
@@ -294,10 +294,6 @@
 }
 
 @media (max-width: 1200px) {
-  .case-study {
-    min-height: clamp(640px, 72svh, 780px);
-  }
-
   .case-study__header,
   .case-study__data {
     grid-column: 1 / span 6;
@@ -327,10 +323,6 @@
 
   .case-library__intro h2 {
     grid-column: 1 / span 5;
-  }
-
-  .case-study {
-    min-height: 680px;
   }
 
   .case-study__inner {
