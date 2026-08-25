@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 const navigation = [
-  ['Обо мне', '#profile'],
+  ['Обо мне', '#hero'],
   ['Услуги', '#services'],
   ['Кейсы', '#cases'],
   ['Опыт', '#experience'],
