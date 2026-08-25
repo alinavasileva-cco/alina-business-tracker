@@ -12,22 +12,13 @@ type CaseSectionProps = {
 };
 
 export default function CaseSection({ caseStudy, image }: CaseSectionProps) {
-  const displayCompany = caseStudy.id === 'case-03' ? 'Garwin' : caseStudy.company;
-  const displayMetrics = caseStudy.metrics
-    .filter((metric) => !(caseStudy.id === 'case-01' && metric.value === '8'))
-    .map((metric) => (
-      caseStudy.id === 'case-03' && metric.value === '×3'
-        ? { ...metric, label: 'рост заявок' }
-        : metric
-    ));
-
   return (
     <article className={`case-study case-study--${caseStudy.imageKey}`} id={caseStudy.id} aria-labelledby={`${caseStudy.id}-title`}>
       <div className="case-study__inner section-shell">
         <header className="case-study__header" data-reveal>
           <p className="section-kicker">{caseStudy.eyebrow}</p>
           <h3 id={`${caseStudy.id}-title`}>{caseStudy.title}</h3>
-          {displayCompany && <p className="case-study__company">{displayCompany}</p>}
+          {caseStudy.company && <p className="case-study__company">{caseStudy.company}</p>}
           <p className="case-study__lead">{caseStudy.lead}</p>
         </header>
 
@@ -38,7 +29,7 @@ export default function CaseSection({ caseStudy, image }: CaseSectionProps) {
         <div className="case-study__data" data-reveal>
           <section className="case-study__metrics" aria-label="Ключевые показатели">
             <div className="case-study__metrics-grid">
-              {displayMetrics.map((metric) => (
+              {caseStudy.metrics.map((metric) => (
                 <div className={`case-study__metric${metric.accent ? ' is-accent' : ''}${metric.long ? ' is-long' : ''}`} key={`${metric.value}-${metric.label}`}>
                   <span className="case-study__metric-value">{metric.value}</span>
                   <span className="case-study__metric-caption">{metric.label}</span>
