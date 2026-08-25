@@ -6,6 +6,7 @@ on:
     paths:
       - 'src/**'
       - 'web/**'
+      - 'tools/clean_portrait_v11.py'
       - 'package.json'
       - 'package-lock.json'
       - 'vite.config.ts'
@@ -33,6 +34,26 @@ jobs:
         with:
           node-version: 22
           cache: npm
+
+      - name: Prepare complete font subsets
+        run: |
+          curl --fail --location --retry 3 \
+            'https://cdn.jsdelivr.net/fontsource/fonts/manrope:vf@5.3.0/latin-wght-normal.woff2' \
+            --output src/assets/fonts/manrope-latin-wght-normal.woff2
+          curl --fail --location --retry 3 \
+            'https://cdn.jsdelivr.net/fontsource/fonts/noto-serif-display:vf@5.3.0/latin-wght-normal.woff2' \
+            --output src/assets/fonts/noto-serif-display-latin-wght-normal.woff2
+          test -s src/assets/fonts/manrope-latin-wght-normal.woff2
+          test -s src/assets/fonts/noto-serif-display-latin-wght-normal.woff2
+
+      - name: Clean portrait alpha edge
+        run: |
+          python -m pip install --disable-pip-version-check pillow numpy scipy
+          git show 1481328f4e5af141e9c4150f0b6776db0b0d868a:v2/assets/alina-portrait-clean.png > /tmp/alina-portrait-source.png
+          test -s /tmp/alina-portrait-source.png
+          python tools/clean_portrait_v11.py \
+            /tmp/alina-portrait-source.png \
+            src/assets/hero/alina-portrait.png
 
       - name: Install
         run: npm ci
