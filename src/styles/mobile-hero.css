@@ -1,0 +1,118 @@
+/* Mobile-only hero composition. Desktop and tablet remain untouched. */
+@media (max-width: 767px) {
+  .hero {
+    min-height: 820px;
+    height: 100svh;
+    max-height: 900px;
+  }
+
+  .hero__scene img {
+    object-position: center top;
+  }
+
+  .hero::after {
+    height: 30%;
+  }
+
+  .hero__headline {
+    max-width: calc(100vw - 44px);
+    white-space: normal;
+  }
+
+  .hero__headline--growth {
+    top: 12.5%;
+    left: 22px;
+    font-size: clamp(3.25rem, 15.5vw, 3.85rem);
+    line-height: .82;
+  }
+
+  .hero__headline--needs {
+    top: 21%;
+    right: auto;
+    left: 22px;
+    font-size: clamp(2.9rem, 13.8vw, 3.5rem);
+    line-height: .78;
+  }
+
+  .hero__stage {
+    padding-bottom: 174px;
+    transform: translateY(-4px);
+  }
+
+  .hero__portrait {
+    height: 49%;
+    max-width: 76%;
+  }
+
+  .hero__copy {
+    right: 22px;
+    bottom: 18px;
+    left: 22px;
+    width: auto;
+  }
+
+  .hero__copy h1 {
+    font-size: 1.06rem;
+    line-height: 1.05;
+  }
+
+  .hero__role {
+    max-width: 100%;
+    margin-top: 5px;
+    font-size: .49rem;
+    line-height: 1.32;
+  }
+
+  .hero__profile {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 18px;
+    margin-top: 15px;
+  }
+
+  .hero__profile dt {
+    font-size: clamp(1.22rem, 6vw, 1.55rem);
+    line-height: .92;
+  }
+
+  .hero__profile dd {
+    max-width: 145px;
+    margin-top: 3px;
+    font-size: .49rem;
+    line-height: 1.25;
+  }
+
+  .hero__telegram {
+    right: 20px;
+    bottom: 190px;
+    font-size: .64rem;
+  }
+}
+
+@media (max-width: 390px) and (max-height: 760px) {
+  .hero {
+    min-height: 760px;
+    height: 100svh;
+  }
+
+  .hero__headline--growth {
+    top: 11.5%;
+    font-size: 3.15rem;
+  }
+
+  .hero__headline--needs {
+    top: 20%;
+    font-size: 2.8rem;
+  }
+
+  .hero__stage {
+    padding-bottom: 166px;
+  }
+
+  .hero__portrait {
+    height: 47%;
+  }
+
+  .hero__telegram {
+    bottom: 180px;
+  }
+}
