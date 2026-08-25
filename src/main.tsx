@@ -6,6 +6,7 @@ import './styles/global.css';
 import './styles/integrated.css';
 import './styles/cases.css';
 
+// Production entrypoint for the unified editorial layout.
 document.documentElement.classList.add('js');
 
 createRoot(document.getElementById('root')!).render(

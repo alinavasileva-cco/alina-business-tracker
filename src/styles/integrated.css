@@ -93,8 +93,8 @@ body,
 
 .site-nav a {
   font-size: .66rem;
-  font-weight: 600;
-  letter-spacing: .09em;
+  font-weight: 400;
+  letter-spacing: .07em;
   text-transform: uppercase;
 }
 
@@ -230,7 +230,7 @@ body,
 
 .hero__copy h1 {
   font-size: clamp(1.16rem, 1.3vw, 1.48rem);
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: -.025em;
   line-height: 1.1;
   text-transform: uppercase;
@@ -241,7 +241,7 @@ body,
   margin-top: 9px;
   color: var(--muted);
   font-size: clamp(.62rem, .7vw, .77rem);
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1.45;
   text-transform: uppercase;
 }
@@ -289,7 +289,7 @@ body,
   bottom: 15.5%;
   color: var(--accent-dark);
   font-size: clamp(.74rem, .86vw, .96rem);
-  font-weight: 600;
+  font-weight: 400;
   white-space: nowrap;
 }
 
@@ -347,8 +347,8 @@ body,
   color: rgb(24 19 15 / 66%);
   font-family: var(--sans);
   font-size: .66rem;
-  font-weight: 500;
-  letter-spacing: .035em;
+  font-weight: 400;
+  letter-spacing: .03em;
   line-height: 1.2;
   text-transform: uppercase;
   white-space: nowrap;
@@ -374,7 +374,7 @@ body,
 
 /* Services */
 .services--v9 {
-  padding-block: clamp(64px, 5.2vw, 96px);
+  padding: clamp(52px, 4.2vw, 76px) 0 clamp(30px, 2.4vw, 44px);
 }
 
 .services-v9__inner {
@@ -419,12 +419,11 @@ body,
 }
 
 .services-v9__item h3 {
-  font-family: var(--serif);
-  font-size: clamp(1.62rem, 1.88vw, 2.26rem);
-  font-weight: 300;
-  font-variation-settings: 'wght' 300;
-  letter-spacing: -.035em;
-  line-height: 1.03;
+  font-family: var(--sans);
+  font-size: clamp(1.05rem, 1.22vw, 1.3rem);
+  font-weight: 400;
+  letter-spacing: -.015em;
+  line-height: 1.25;
 }
 
 .services-v9__item p {
@@ -496,21 +495,19 @@ body,
 .experience-v9__role h3 {
   max-width: 650px;
   color: rgb(24 19 15 / 92%);
-  font-family: var(--serif);
-  font-size: clamp(1.3rem, 1.72vw, 1.98rem);
-  font-weight: 300;
-  font-variation-settings: 'wght' 300;
-  font-optical-sizing: none;
-  letter-spacing: -.034em;
-  line-height: 1.07;
+  font-family: var(--sans);
+  font-size: clamp(1.08rem, 1.35vw, 1.48rem);
+  font-weight: 400;
+  letter-spacing: -.018em;
+  line-height: 1.2;
 }
 
 .experience-v9__role p {
   margin-top: 7px;
   color: var(--accent-dark);
   font-size: .62rem;
-  font-weight: 500;
-  letter-spacing: .08em;
+  font-weight: 400;
+  letter-spacing: .07em;
   line-height: 1.35;
   text-transform: uppercase;
 }
@@ -563,8 +560,8 @@ body,
 .education-v9__degree span {
   color: var(--accent-dark);
   font-size: .64rem;
-  font-weight: 500;
-  letter-spacing: .1em;
+  font-weight: 400;
+  letter-spacing: .08em;
   text-transform: uppercase;
 }
 
@@ -590,19 +587,18 @@ body,
 
 .education-v9__item time {
   color: var(--muted);
-  font-family: var(--serif);
-  font-size: 1.1rem;
-  font-weight: 300;
+  font-family: var(--sans);
+  font-size: .88rem;
+  font-weight: 400;
 }
 
 .education-v9__item h3 {
   margin-top: 20px;
-  font-family: var(--serif);
-  font-size: clamp(1.16rem, 1.46vw, 1.64rem);
-  font-weight: 300;
-  font-variation-settings: 'wght' 300;
-  letter-spacing: -.025em;
-  line-height: 1.08;
+  font-family: var(--sans);
+  font-size: clamp(1rem, 1.12vw, 1.22rem);
+  font-weight: 400;
+  letter-spacing: -.012em;
+  line-height: 1.25;
 }
 
 .education-v9__item p {
@@ -657,9 +653,9 @@ body,
 .contact__links a {
   min-width: 0;
   padding-block: 11px 17px;
-  font-family: var(--serif);
-  font-size: 1.06rem;
-  font-weight: 300;
+  font-family: var(--sans);
+  font-size: .92rem;
+  font-weight: 400;
   overflow-wrap: anywhere;
 }
 
@@ -669,8 +665,8 @@ body,
   color: var(--muted);
   font-family: var(--sans);
   font-size: .54rem;
-  font-weight: 500;
-  letter-spacing: .09em;
+  font-weight: 400;
+  letter-spacing: .07em;
   text-transform: uppercase;
 }
 
@@ -714,10 +710,11 @@ body,
 
   .site-nav.is-open a {
     padding: 12px 0;
-    font-family: var(--serif);
-    font-size: 1.55rem;
-    font-weight: 300;
-    text-transform: none;
+    font-family: var(--sans);
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: .04em;
+    text-transform: uppercase;
   }
 
   .hero {
@@ -919,13 +916,16 @@ body,
   .client-line__group {
     padding-right: 52px;
     font-size: .59rem;
-    font-weight: 500;
-    letter-spacing: .03em;
+    font-weight: 400;
+    letter-spacing: .025em;
   }
 
-  .services--v9,
+  .services--v9 {
+    padding: 48px 0 32px;
+  }
+
   .education--v9 {
-    padding-block: 64px;
+    padding-block: 56px;
   }
 
   .services-v9__inner {
@@ -952,7 +952,7 @@ body,
   }
 
   .services-v9__item h3 {
-    font-size: 1.68rem;
+    font-size: 1.08rem;
   }
 
   .services-v9__item p {
